@@ -55,7 +55,7 @@ class CustomerTest {
     }
 
     @Test
-    @DisplayName("Сортировка по полю score, итерация по возрастанию")
+    @DisplayName("Сортировка по полю scores, итерация по возрастанию")
     void scoreSortingTest() {
         //given
         Customer customer1 = new Customer(1, "Ivan", 233);
