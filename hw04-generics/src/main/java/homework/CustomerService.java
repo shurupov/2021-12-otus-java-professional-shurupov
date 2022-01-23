@@ -6,12 +6,9 @@ import java.util.TreeMap;
 
 public class CustomerService {
 
-    private Map<Customer, String> map = new TreeMap<>((o1, o2) ->
+    private final Map<Customer, String> map = new TreeMap<>((o1, o2) ->
         (int) (o1.getScores() - o2.getScores())
     );
-
-    //todo: 3. надо реализовать методы этого класса
-    //важно подобрать подходящую Map-у, посмотрите на редко используемые методы, они тут полезны
 
     public Map.Entry<Customer, String> getSmallest() {
         for (Map.Entry<Customer, String> entry : map.entrySet()) {
