@@ -40,6 +40,6 @@ public class CustomerService {
     }
 
     public <T extends Customer> void add(T customer, String data) {
-        map.put(customer, data);
+        map.put(new ImmutableCustomer(customer), data);
     }
 }
