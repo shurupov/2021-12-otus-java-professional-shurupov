@@ -1,20 +1,13 @@
 package homework;
 
-
-import java.util.AbstractMap;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.TreeMap;
 
 public class CustomerService {
 
     private Map<Customer, String> map = new TreeMap<>((o1, o2) ->
-        (int) (o1.getScores() - o2.getScores()));
-
-    private PriorityQueue<Map.Entry<Customer, String>> entryPriorityQueue = new PriorityQueue<>((o1, o2) ->
-        (int) (o1.getKey().getScores() - o2.getKey().getScores())
+        (int) (o1.getScores() - o2.getScores())
     );
 
     //todo: 3. надо реализовать методы этого класса
@@ -46,8 +39,7 @@ public class CustomerService {
         return null;
     }
 
-    public void add(Customer customer, String data) {
-        entryPriorityQueue.add(new AbstractMap.SimpleEntry<>(customer, data));
+    public <T extends Customer> void add(T customer, String data) {
         map.put(customer, data);
     }
 }
