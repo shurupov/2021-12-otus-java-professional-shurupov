@@ -14,5 +14,5 @@ Certificate: (will be later)
 
 ## Modules/Homeworks
 
-- Gradle
-    - [Gradle](hw01-gradle)
+- [Gradle](hw01-gradle)
+- [Generics](hw04-generics)
