@@ -12,9 +12,16 @@ public class CustomerService {
 
     public Map.Entry<Customer, String> getSmallest() {
         for (Map.Entry<Customer, String> entry : map.entrySet()) {
-            return entry;
+            return entryCopy(entry);
         }
         return null;
+    }
+
+    private Map.Entry<Customer, String> entryCopy(Map.Entry<Customer, String> entry) {
+        return Map.entry(
+            new Customer(entry.getKey().getId(), entry.getKey().getName(), entry.getKey().getScores()),
+            entry.getValue()
+        );
     }
 
     public Map.Entry<Customer, String> getNext(Customer customer) {
@@ -28,7 +35,7 @@ public class CustomerService {
             Map.Entry<Customer, String> entry = entryIterator.next();
             if (entry.getKey().equals(customer)) {
                 if (entryIterator.hasNext()) {
-                    return entryIterator.next();
+                    return entryCopy(entryIterator.next());
                 }
                 return null;
             }
@@ -37,6 +44,6 @@ public class CustomerService {
     }
 
     public <T extends Customer> void add(T customer, String data) {
-        map.put(new ImmutableCustomer(customer), data);
+        map.put(customer, data);
     }
 }
