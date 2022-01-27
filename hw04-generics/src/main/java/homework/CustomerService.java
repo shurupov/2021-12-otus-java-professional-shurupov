@@ -18,8 +18,9 @@ public class CustomerService {
     }
 
     private Map.Entry<Customer, String> entryCopy(Map.Entry<Customer, String> entry) {
+        var customer = entry.getKey();
         return Map.entry(
-            new Customer(entry.getKey().getId(), entry.getKey().getName(), entry.getKey().getScores()),
+            new Customer(customer.getId(), customer.getName(), customer.getScores()),
             entry.getValue()
         );
     }
