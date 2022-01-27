@@ -9,10 +9,10 @@ Certificate: (will be later)
 <details>
   <summary>Keywords: </summary>
 
-`Gradle`
+`Gradle`, `Generics`
 </details>
 
 ## Modules/Homeworks
 
-- Gradle
-    - [Gradle](hw01-gradle)
+- [Gradle](hw01-gradle)
+- [Generics](hw04-generics)
