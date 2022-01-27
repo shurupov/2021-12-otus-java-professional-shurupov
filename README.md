@@ -16,3 +16,4 @@ Certificate: (will be later)
 
 - [Gradle](hw01-gradle)
 - [Generics](hw04-generics)
+- [Annotations](hw06-annotations)

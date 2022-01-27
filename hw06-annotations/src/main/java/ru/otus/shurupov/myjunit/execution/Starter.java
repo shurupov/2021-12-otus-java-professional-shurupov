@@ -11,7 +11,6 @@ import java.util.List;
 public class Starter {
     public static void start(Class<?> ...classes) {
         for (Class<?> clazz : classes) {
-            System.out.println();
             System.out.println("Class " + clazz.getName() + " execution started");
             start(clazz);
             System.out.println("Class " + clazz.getName() + " execution ended");

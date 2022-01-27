@@ -1,8 +1,4 @@
-# Generics
+# Annotaions
 
 ## Task
-Implement methods to make tests passed.
-
-## Used
-* Gradle
-* Generics
+Implement test framework based on annotations.
