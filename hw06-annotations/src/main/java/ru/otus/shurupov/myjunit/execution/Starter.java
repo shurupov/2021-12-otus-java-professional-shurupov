@@ -10,15 +10,20 @@ import java.util.List;
 
 public class Starter {
     public static void start(Class<?> ...classes) {
+
+        Counter counter = new Counter();
+
         for (Class<?> clazz : classes) {
             System.out.println("Class " + clazz.getName() + " execution started");
-            start(clazz);
+            performTestClass(clazz, counter);
             System.out.println("Class " + clazz.getName() + " execution ended");
             System.out.println();
         }
+
+        counter.report();
     }
 
-    public static void start(Class<?> clazz) {
+    public static void performTestClass(Class<?> clazz, Counter counter) {
         Method[] methods = clazz.getMethods();
         List<Method> beforeMethods = new ArrayList<>();
         List<Method> afterMethods = new ArrayList<>();
@@ -50,14 +55,17 @@ public class Starter {
 
         try {
             for (Method method : testMethods) {
-                test(clazz, method, beforeMethod, afterMethod);
+                test(clazz, method, beforeMethod, afterMethod, counter);
             }
         } catch (ReflectiveOperationException e) {
             processCreationException(clazz, e.getCause() != null ? e.getCause() : e);
+            int testsCount = testMethods.size();
+            counter.add(CounterType.TOTAL, testsCount);
+            counter.add(CounterType.FAILED, testsCount);
         }
     }
 
-    public static void test(Class<?> clazz, Method testMethod, Method beforeMethod, Method afterMethod) throws ReflectiveOperationException {
+    public static void test(Class<?> clazz, Method testMethod, Method beforeMethod, Method afterMethod, Counter counter) throws ReflectiveOperationException {
         Object testClassInstance = clazz.getDeclaredConstructor().newInstance();
 
         if (beforeMethod != null) {
@@ -65,12 +73,16 @@ public class Starter {
                 beforeMethod.invoke(testClassInstance);
             } catch (ReflectiveOperationException e) {
                 processException("before method", clazz, beforeMethod, e.getCause());
+                counter.inc(CounterType.TOTAL);
+                counter.inc(CounterType.FAILED);
                 return;
             }
         }
 
         try {
             testMethod.invoke(testClassInstance);
+            counter.inc(CounterType.TOTAL);
+            counter.inc(CounterType.SUCCESS);
         } catch (ReflectiveOperationException e) {
             processException("test method", clazz, testMethod, e.getCause());
         }
