@@ -24,6 +24,9 @@ public class Counter {
     }
 
     public void report() {
+
+        counters.put(CounterType.FAILED, counters.get(CounterType.TOTAL) - counters.get(CounterType.SUCCESS));
+
         System.out.println("Tests report");
         for (CounterType type : CounterType.values()) {
             System.out.println(type.name().toLowerCase() + ": " + counters.get(type));

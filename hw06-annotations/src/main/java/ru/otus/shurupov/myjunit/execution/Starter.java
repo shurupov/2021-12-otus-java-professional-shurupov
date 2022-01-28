@@ -53,15 +53,14 @@ public class Starter {
         var beforeMethod = beforeMethods.isEmpty() ? null : beforeMethods.get(0);
         var afterMethod = afterMethods.isEmpty() ? null : afterMethods.get(0);
 
+        counter.add(CounterType.TOTAL, testMethods.size());
+
         try {
             for (Method method : testMethods) {
                 test(clazz, method, beforeMethod, afterMethod, counter);
             }
-        } catch (ReflectiveOperationException e) {
+        } catch (Throwable e) {
             processCreationException(clazz, e.getCause() != null ? e.getCause() : e);
-            int testsCount = testMethods.size();
-            counter.add(CounterType.TOTAL, testsCount);
-            counter.add(CounterType.FAILED, testsCount);
         }
     }
 
@@ -71,26 +70,23 @@ public class Starter {
         if (beforeMethod != null) {
             try {
                 beforeMethod.invoke(testClassInstance);
-            } catch (ReflectiveOperationException e) {
+            } catch (Throwable e) {
                 processException("before method", clazz, beforeMethod, e.getCause());
-                counter.inc(CounterType.TOTAL);
-                counter.inc(CounterType.FAILED);
                 return;
             }
         }
 
         try {
             testMethod.invoke(testClassInstance);
-            counter.inc(CounterType.TOTAL);
             counter.inc(CounterType.SUCCESS);
-        } catch (ReflectiveOperationException e) {
+        } catch (Throwable e) {
             processException("test method", clazz, testMethod, e.getCause());
         }
 
         if (afterMethod != null) {
             try {
                 afterMethod.invoke(testClassInstance);
-            } catch (ReflectiveOperationException e) {
+            } catch (Throwable e) {
                 processException("after method", clazz, afterMethod, e.getCause());
             }
         }

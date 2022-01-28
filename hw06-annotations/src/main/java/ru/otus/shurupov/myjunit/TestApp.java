@@ -1,4 +1,4 @@
-package ru.otus.shurupov.myjunit;
+    package ru.otus.shurupov.myjunit;
 
 import ru.otus.shurupov.myjunit.execution.Starter;
 import ru.otus.shurupov.myjunit.test.*;
