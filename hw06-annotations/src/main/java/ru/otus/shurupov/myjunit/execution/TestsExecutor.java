@@ -8,7 +8,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Starter {
+public class TestsExecutor {
+
     public static void start(Class<?> ...classes) {
 
         Counter counter = new Counter();
@@ -20,7 +21,12 @@ public class Starter {
             System.out.println();
         }
 
-        counter.report();
+        var report = counter.getReport();
+
+        System.out.println("Tests report");
+        for (CounterType type : CounterType.values()) {
+            System.out.println(type.name().toLowerCase() + ": " + report.get(type));
+        }
     }
 
     public static void performTestClass(Class<?> clazz, Counter counter) {

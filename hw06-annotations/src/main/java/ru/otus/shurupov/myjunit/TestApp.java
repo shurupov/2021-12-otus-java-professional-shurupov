@@ -1,11 +1,11 @@
     package ru.otus.shurupov.myjunit;
 
-import ru.otus.shurupov.myjunit.execution.Starter;
+import ru.otus.shurupov.myjunit.execution.TestsExecutor;
 import ru.otus.shurupov.myjunit.test.*;
 
 public class TestApp {
     public static void main(String[] args) {
-        Starter.start(
+        TestsExecutor.start(
             WithoutBeforeAndAfterTest.class,
             WithExceptionInConstructorTest.class,
             WithoutPublicConstructorClass.class,
