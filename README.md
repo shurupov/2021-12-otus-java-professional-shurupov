@@ -9,7 +9,7 @@ Certificate: (will be later)
 <details>
   <summary>Keywords: </summary>
 
-`Gradle`, `Generics`
+`Gradle`, `Generics`, `Annotations`, `Garbage Collector`
 </details>
 
 ## Modules/Homeworks
