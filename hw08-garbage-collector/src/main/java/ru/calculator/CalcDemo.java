@@ -19,8 +19,11 @@ public class CalcDemo {
         var summator = new Summator();
         long startTime = System.currentTimeMillis();
 
+        //Optimized part. Now we use the same object instead of creating new every time.
+        var data = new Data();
+
         for (var idx = 0; idx < counter; idx++) {
-            var data = new Data(idx);
+            data.setValue(idx);
             summator.calc(data);
 
             if (idx % 10_000_000 == 0) {
