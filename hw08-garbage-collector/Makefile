@@ -1,3 +1,23 @@
+start64m:
+	java -jar \
+		-Xms64m\
+		-Xmx64m\
+		-XX:+HeapDumpOnOutOfMemoryError\
+        -XX:HeapDumpPath=./logs/heapdump.hprof\
+		-XX:+UseG1GC\
+		-Xlog:gc=debug:file=./logs/gc-%p-%t.log:tags,uptime,time,level:filecount=5,filesize=10m\
+		build/libs/gccheck-0.1.jar
+
+start128m:
+	java -jar \
+		-Xms128m\
+		-Xmx128m\
+		-XX:+HeapDumpOnOutOfMemoryError\
+        -XX:HeapDumpPath=./logs/heapdump.hprof\
+		-XX:+UseG1GC\
+		-Xlog:gc=debug:file=./logs/gc-%p-%t.log:tags,uptime,time,level:filecount=5,filesize=10m\
+		build/libs/gccheck-0.1.jar
+
 start256m:
 	java -jar \
 		-Xms256m\
