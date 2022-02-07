@@ -16,11 +16,16 @@
 | 2G | 8746 | 8 | no |
 | 4G | 8707 | 8 | no |
 | 8G | 9277 | 9 | no |
-| 256M | 8395 | 8 | yes |
-| 512M | 7635 | 7 | yes |
-| 768M | 7420 | 7 | yes |
-| 1G | 7217 | 7 | yes |
-| 2G | 7147 | 7 | yes |
-| 4G | 5790 | 5 | yes |
-| 8G | 4980 | 4 | yes |
+| 256M | 738 | 0 | yes |
+| 512M | 769 | 0 | yes |
+| 768M | 786 | 0 | yes |
+| 1G | 822 | 0 | yes |
+| 2G | 932 | 0 | yes |
+| 4G | 914 | 0 | yes |
+| 8G | 834 | 0 | yes |
+
+Before optimization the best heap size is 2G.
+After the optimization in [this change](https://github.com/shurupov/2021-12-otus-java-professional-shurupov/commit/03285e28c7f8c132ec68697c5729ddecf92cf2e7#diff-e8fbf648f04dc10b6894d551af0e8c0b741b7e43a80d0b2414a70f410ed32c01R23) the best heap size is 256M.
+
+
 
