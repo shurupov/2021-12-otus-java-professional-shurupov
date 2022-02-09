@@ -9,7 +9,7 @@ Certificate: (will be later)
 <details>
   <summary>Keywords: </summary>
 
-`Gradle`, `Generics`
+`Gradle`, `Generics`, `Annotations`, `Garbage Collector`
 </details>
 
 ## Modules/Homeworks
@@ -17,3 +17,4 @@ Certificate: (will be later)
 - [Gradle](hw01-gradle)
 - [Generics](hw04-generics)
 - [Annotations](hw06-annotations)
+- [Garbage Collector](hw08-garbage-collector)
