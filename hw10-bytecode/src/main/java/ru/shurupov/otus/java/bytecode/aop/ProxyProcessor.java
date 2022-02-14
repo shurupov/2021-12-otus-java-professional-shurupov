@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProxyProcessor {
@@ -30,15 +31,33 @@ public class ProxyProcessor {
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (method.getAnnotation(Log.class) != null) {
+        public Object invoke(Object proxy, Method interfaceMethod, Object[] args) throws Throwable {
+
+            Optional<Method> optionalMethod = Arrays.stream(innerObject.getClass().getMethods())
+                .filter(m -> m.isAnnotationPresent(Log.class))
+                .filter(m -> m.getName().equals(interfaceMethod.getName()))
+                .filter(m -> m.getReturnType().equals(interfaceMethod.getReturnType()))
+                .filter(m -> m.getParameterCount() == m.getParameterCount())
+                .filter(m -> {
+                    for (int i = 0; i < m.getParameterCount(); i++) {
+                        if (!m.getParameterTypes()[i].equals(interfaceMethod.getParameterTypes()[i])) {
+                            return false;
+                        }
+                    }
+                    return true;
+                })
+                .findAny();
+
+            if (optionalMethod.isPresent()) {
+                Method method = optionalMethod.get();
                 System.out.println("Executed method: " + method.getName() + ". Parameters: "
                     + Arrays.stream(method.getParameters())
-                        .map(Object::toString)
+                    .map(m -> m.getType().getName())
                     .collect(Collectors.joining(", ", "[", "]"))
                 );
             }
-            return method.invoke(innerObject, args);
+
+            return interfaceMethod.invoke(innerObject, args);
         }
     }
 }
