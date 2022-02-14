@@ -7,11 +7,11 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 shadowJar {
-    archiveBaseName.set('gccheck')
+    archiveBaseName.set('bytecode')
     archiveVersion.set('0.1')
     archiveClassifier.set('')
     manifest {
-        attributes 'Main-Class': 'ru.calculator.CalcDemo'
+        attributes 'Main-Class': 'ru.shurupov.otus.java.bytecode.ByteCode'
     }
 }
 
