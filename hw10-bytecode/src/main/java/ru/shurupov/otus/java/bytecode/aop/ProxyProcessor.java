@@ -10,23 +10,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProxyProcessor {
-    public static <I, C> Object getProxy(Class<I> interfaze, Class<C> clazz) {
+
+    public static Object getProxy(Class<?> interfaze, Class<?> clazz) {
         try {
             return Proxy.newProxyInstance(
                 ProxyProcessor.class.getClassLoader(),
                 new Class<?>[]{ interfaze },
-                new ProxyMethodHandler<>(clazz.getDeclaredConstructor().newInstance())
+                new ProxyMethodHandler(clazz.getDeclaredConstructor().newInstance())
             );
         } catch (Exception e) {
             return null;
         }
     }
 
-    static class ProxyMethodHandler<C> implements InvocationHandler {
+    static class ProxyMethodHandler implements InvocationHandler {
 
-        private C innerObject;
+        private final Object innerObject;
 
-        ProxyMethodHandler(C innerObject) {
+        ProxyMethodHandler(Object innerObject) {
             this.innerObject = innerObject;
         }
 
