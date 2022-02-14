@@ -52,8 +52,8 @@ public class ProxyProcessor {
             if (optionalMethod.isPresent()) {
                 Method method = optionalMethod.get();
                 System.out.println("Executed method: " + method.getName() + ". Parameters: "
-                    + Arrays.stream(method.getParameters())
-                    .map(m -> m.getType().getName())
+                    + Arrays.stream(args)
+                    .map(a -> "(" + a.getClass().getName() + ") " + a)
                     .collect(Collectors.joining(", ", "[", "]"))
                 );
             }
