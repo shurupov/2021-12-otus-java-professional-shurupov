@@ -9,7 +9,10 @@ public class CustomClassLoader extends ClassLoader {
     private final Class<?> clazz;
 
     public CustomClassLoader(String filepath) throws IOException {
-        byte[] bytecode = Files.readAllBytes(Paths.get(filepath));
+        this(Files.readAllBytes(Paths.get(filepath)));
+    }
+
+    public CustomClassLoader(byte[] bytecode) {
         clazz = defineClass(null, bytecode, 0, bytecode.length);
     }
 

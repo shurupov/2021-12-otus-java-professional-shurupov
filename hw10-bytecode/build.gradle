@@ -15,6 +15,16 @@ shadowJar {
     }
 }
 
+shadowJar {
+    archiveBaseName.set('bytecode-with-agent')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.shurupov.otus.java.bytecode.ByteCode2'
+        attributes 'Premain-Class': 'ru.shurupov.otus.java.bytecode.Agent'
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:unchecked'
     options.deprecation = true
