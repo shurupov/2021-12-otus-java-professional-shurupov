@@ -7,6 +7,8 @@
 4. Optimize the application to make it work with minimal heap size.
 5. Repeat measurements.
 
+## Results
+
 | Heap Size | milliseconds | Seconds | Optimized
 | ------------- |:-------------:|:----:|:---:|
 | 256M | `out of memory` | `out of memory` | no |

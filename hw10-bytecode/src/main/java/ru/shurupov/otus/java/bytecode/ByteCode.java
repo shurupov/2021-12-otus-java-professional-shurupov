@@ -5,6 +5,10 @@ import ru.shurupov.otus.java.bytecode.classloader.CustomClassLoader;
 import ru.shurupov.otus.java.bytecode.process.TestLogging;
 import ru.shurupov.otus.java.bytecode.process.impl.TestLoggingImpl;
 
+/*
+* java -jar build/libs/bytecode-0.1.jar $(pwd)/build/classes/java/main/ru/shurupov/otus/java/bytecode/process/impl/TestLoggingImpl.class
+* */
+
 import java.io.IOException;
 
 public class ByteCode {
