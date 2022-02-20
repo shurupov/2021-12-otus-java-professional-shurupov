@@ -6,21 +6,29 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProxyProcessor {
 
+    private static final Map<Class<?>, Object> proxies = new HashMap<>();
+
     public static Object getProxy(Class<?> interfaze, Class<?> clazz) {
-        try {
-            return Proxy.newProxyInstance(
-                ProxyProcessor.class.getClassLoader(),
-                new Class<?>[]{ interfaze },
-                new ProxyMethodHandler(clazz.getDeclaredConstructor().newInstance())
-            );
-        } catch (Exception e) {
-            return null;
+        if (!proxies.containsKey(clazz)) {
+            try {
+                Object proxy = Proxy.newProxyInstance(
+                    ProxyProcessor.class.getClassLoader(),
+                    new Class<?>[]{interfaze},
+                    new ProxyMethodHandler(clazz.getDeclaredConstructor().newInstance())
+                );
+                proxies.put(clazz, proxy);
+            } catch (Exception e) {
+                return null;
+            }
         }
+        return proxies.get(clazz);
     }
 
     static class ProxyMethodHandler implements InvocationHandler {
