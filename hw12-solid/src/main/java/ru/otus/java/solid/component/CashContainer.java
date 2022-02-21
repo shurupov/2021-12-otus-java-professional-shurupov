@@ -1,8 +1,10 @@
-package ru.otus.java.solid.domain;
+package ru.otus.java.solid.component;
+
+import ru.otus.java.solid.domain.Banknote;
 
 import java.util.Map;
 
-public interface Cash extends Iterable<Map.Entry<Banknote, Integer>> {
+public interface CashContainer extends Iterable<Map.Entry<Banknote, Integer>> {
 
     boolean containsBanknote(Banknote banknote);
 

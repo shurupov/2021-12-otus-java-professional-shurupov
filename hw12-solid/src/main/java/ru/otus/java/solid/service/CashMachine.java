@@ -1,26 +1,26 @@
 package ru.otus.java.solid.service;
 
+import ru.otus.java.solid.component.CashContainer;
 import ru.otus.java.solid.domain.Banknote;
-import ru.otus.java.solid.domain.Cash;
 import ru.otus.java.solid.exception.NotEnoughBanknotesException;
-import ru.otus.java.solid.factory.CashFactory;
+import ru.otus.java.solid.factory.CashContainerFactory;
 
 public class CashMachine {
 
-    private final CashFactory cashFactory;
-    private final Cash internalCash;
+    private final CashContainerFactory cashContainerFactory;
+    private final CashContainer internalCash;
 
-    public CashMachine(CashFactory cashFactory, Cash cash) {
-        this.cashFactory = cashFactory;
+    public CashMachine(CashContainerFactory cashContainerFactory, CashContainer cash) {
+        this.cashContainerFactory = cashContainerFactory;
         this.internalCash = cash;
     }
 
-    public Cash getMoney(int amount) {
-        Cash cash = cashFactory.createEmptyCash();
+    public CashContainer getMoney(int amount) {
+        CashContainer cashContainer = cashContainerFactory.createEmptyCashContainer();
 
         for (Banknote banknote : Banknote.values()) {
             while (internalCash.containsBanknote(banknote) && amount >= banknote.getNominal()) {
-                cash.addBanknote(banknote);
+                cashContainer.addBanknote(banknote);
                 internalCash.removeBanknote(banknote);
                 amount -= banknote.getNominal();
             }
@@ -30,11 +30,11 @@ public class CashMachine {
             throw new NotEnoughBanknotesException();
         }
 
-        return cash;
+        return cashContainer;
     }
 
-    public void addMoney(Cash cash) {
-        for (var banknotes : cash) {
+    public void addMoney(CashContainer cashContainer) {
+        for (var banknotes : cashContainer) {
             for (int i = 0; i < banknotes.getValue(); i++) {
                 internalCash.addBanknote(banknotes.getKey());
             }

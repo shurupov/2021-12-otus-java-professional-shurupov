@@ -1,10 +1,10 @@
 package ru.otus.java.solid.service;
 
 import org.junit.jupiter.api.Test;
+import ru.otus.java.solid.component.CashContainerImpl;
 import ru.otus.java.solid.domain.Banknote;
-import ru.otus.java.solid.domain.CashImpl;
 import ru.otus.java.solid.exception.NotEnoughBanknotesException;
-import ru.otus.java.solid.factory.CashFactoryImpl;
+import ru.otus.java.solid.factory.CashContainerFactoryImpl;
 
 import java.util.HashMap;
 
@@ -43,11 +43,11 @@ class CashMachineTest {
     }
 
     private CashMachine cashMachine() {
-        return new CashMachine(new CashFactoryImpl(), initialCash());
+        return new CashMachine(new CashContainerFactoryImpl(), initialCash());
     }
 
-    private CashImpl initialCash() {
-        CashImpl cash = new CashImpl();
+    private CashContainerImpl initialCash() {
+        CashContainerImpl cash = new CashContainerImpl();
         cash.put(Banknote.R5000, 1);
         cash.put(Banknote.R1000, 2);
         cash.put(Banknote.R500, 2);
@@ -57,8 +57,8 @@ class CashMachineTest {
         return cash;
     }
 
-    private CashImpl r200() {
-        CashImpl cash = new CashImpl();
+    private CashContainerImpl r200() {
+        CashContainerImpl cash = new CashContainerImpl();
         cash.addBanknote(Banknote.R100);
         cash.addBanknote(Banknote.R100);
         return cash;

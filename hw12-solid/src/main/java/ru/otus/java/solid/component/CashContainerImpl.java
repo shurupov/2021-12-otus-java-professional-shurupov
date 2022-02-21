@@ -1,13 +1,14 @@
-package ru.otus.java.solid.domain;
+package ru.otus.java.solid.component;
 
+import ru.otus.java.solid.domain.Banknote;
 import ru.otus.java.solid.exception.NotEnoughBanknotesException;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class CashImpl extends HashMap<Banknote, Integer> implements Cash {
+public class CashContainerImpl extends HashMap<Banknote, Integer> implements CashContainer {
 
-    public CashImpl() {
+    public CashContainerImpl() {
     }
 
     public boolean containsBanknote(Banknote banknote) {
