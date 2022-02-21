@@ -5,10 +5,7 @@ import ru.shurupov.otus.java.bytecode.annotation.Log;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProxyProcessor {
@@ -21,7 +18,7 @@ public class ProxyProcessor {
                 Object proxy = Proxy.newProxyInstance(
                     ProxyProcessor.class.getClassLoader(),
                     new Class<?>[]{interfaze},
-                    new ProxyMethodHandler(clazz.getDeclaredConstructor().newInstance())
+                    new ProxyMethodHandler(interfaze, clazz)
                 );
                 proxies.put(clazz, proxy);
             } catch (Exception e) {
@@ -34,32 +31,39 @@ public class ProxyProcessor {
     static class ProxyMethodHandler implements InvocationHandler {
 
         private final Object innerObject;
+        private final List<Method> methodsToLog;
 
-        ProxyMethodHandler(Object innerObject) {
-            this.innerObject = innerObject;
+        ProxyMethodHandler(Class<?> interfaze, Class<?> clazz) throws ReflectiveOperationException {
+            this.innerObject = clazz.getDeclaredConstructor().newInstance();
+
+            List<Method> classMethodsToLog = Arrays.stream(clazz.getMethods())
+                .filter(m -> m.isAnnotationPresent(Log.class))
+                .collect(Collectors.toList());
+
+            this.methodsToLog = Arrays.stream(interfaze.getMethods())
+                .filter(
+                    interfaceMethod -> classMethodsToLog.stream()
+                        .filter(classMethod -> classMethod.getName().equals(interfaceMethod.getName()))
+                        .filter(classMethod -> classMethod.getReturnType().equals(interfaceMethod.getReturnType()))
+                        .filter(classMethod -> classMethod.getParameterCount() == interfaceMethod.getParameterCount())
+                        .anyMatch(classMethod -> {
+                            for (int i = 0; i < classMethod.getParameterCount(); i++) {
+                                if (!classMethod.getParameterTypes()[i].equals(interfaceMethod.getParameterTypes()[i])) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        })
+                )
+
+                .collect(Collectors.toList());
+
         }
 
         @Override
         public Object invoke(Object proxy, Method interfaceMethod, Object[] args) throws Throwable {
-
-            Optional<Method> optionalMethod = Arrays.stream(innerObject.getClass().getMethods())
-                .filter(m -> m.isAnnotationPresent(Log.class))
-                .filter(m -> m.getName().equals(interfaceMethod.getName()))
-                .filter(m -> m.getReturnType().equals(interfaceMethod.getReturnType()))
-                .filter(m -> m.getParameterCount() == m.getParameterCount())
-                .filter(m -> {
-                    for (int i = 0; i < m.getParameterCount(); i++) {
-                        if (!m.getParameterTypes()[i].equals(interfaceMethod.getParameterTypes()[i])) {
-                            return false;
-                        }
-                    }
-                    return true;
-                })
-                .findAny();
-
-            if (optionalMethod.isPresent()) {
-                Method method = optionalMethod.get();
-                System.out.println("Executed method: " + method.getName() + ". Parameters: "
+            if (methodsToLog.contains(interfaceMethod)) {
+                System.out.println("Executed method: " + interfaceMethod.getName() + ". Parameters: "
                     + Arrays.stream(args)
                     .map(a -> "(" + a.getClass().getName() + ") " + a)
                     .collect(Collectors.joining(", ", "[", "]"))
