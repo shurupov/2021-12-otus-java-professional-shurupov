@@ -1,7 +1,6 @@
 package ru.otus;
 
 import ru.otus.handler.ComplexProcessor;
-import ru.otus.listener.ListenerPrinterConsole;
 import ru.otus.listener.homework.HistoryListener;
 import ru.otus.model.Message;
 import ru.otus.processor.homework.ChangeFieldValuesProcessor;
