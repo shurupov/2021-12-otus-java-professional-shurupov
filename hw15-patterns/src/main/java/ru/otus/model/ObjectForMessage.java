@@ -1,7 +1,5 @@
 package ru.otus.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ObjectForMessage {
@@ -10,8 +8,8 @@ public class ObjectForMessage {
     public ObjectForMessage() {
     }
 
-    public ObjectForMessage(List<String> data) {
-        this.data = data;
+    public ObjectForMessage(ObjectForMessage objectForMessage) {
+        this.data = List.copyOf(objectForMessage.getData());
     }
 
     public List<String> getData() {
@@ -20,26 +18,5 @@ public class ObjectForMessage {
 
     public void setData(List<String> data) {
         this.data = data;
-    }
-
-    public Builder toBuilder() {
-        return new Builder(data);
-    }
-
-    public static class Builder {
-        private List<String> data;
-
-        public Builder(List<String> data) {
-            this.data = data;
-        }
-
-        public Builder data(List<String> data) {
-            this.data = data;
-            return this;
-        }
-
-        public ObjectForMessage build() {
-            return new ObjectForMessage(List.copyOf(data));
-        }
     }
 }

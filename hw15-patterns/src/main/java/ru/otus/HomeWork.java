@@ -1,5 +1,6 @@
 package ru.otus;
 
+import ru.otus.factory.TimeFactoryImpl;
 import ru.otus.handler.ComplexProcessor;
 import ru.otus.listener.homework.HistoryListener;
 import ru.otus.model.Message;
@@ -29,7 +30,10 @@ public class HomeWork {
            из элеменов "to do" создать new ComplexProcessor и обработать сообщение
          */
 
-        var processors = List.of(new ChangeFieldValuesProcessor(), new EvenSecondExceptionProcessor());
+        var processors = List.of(
+            new ChangeFieldValuesProcessor(),
+            new EvenSecondExceptionProcessor(new TimeFactoryImpl())
+        );
 
         var complexProcessor = new ComplexProcessor(processors, ex -> {});
         var historyListener = new HistoryListener();

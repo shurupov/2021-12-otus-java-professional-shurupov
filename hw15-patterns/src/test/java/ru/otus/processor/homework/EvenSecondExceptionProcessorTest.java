@@ -4,23 +4,25 @@ import org.junit.jupiter.api.Test;
 import ru.otus.processor.Processor;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
+import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EvenSecondExceptionProcessorTest {
 
     @Test
-    void process() throws InterruptedException {
-        Processor processor = new EvenSecondExceptionProcessor();
-        while (LocalDateTime.now().get(ChronoField.SECOND_OF_MINUTE) % 2 > 0) {
-            Thread.sleep(400);
-        }
+    void process1() {
+        Processor processor = new EvenSecondExceptionProcessor(
+            () -> LocalDateTime.of(5, Month.APRIL, 1, 1, 0, 2)
+        );
         assertThrows(RuntimeException.class, () -> processor.process(null), "Even second");
+    }
 
-        while (LocalDateTime.now().get(ChronoField.SECOND_OF_MINUTE) % 2 == 0) {
-            Thread.sleep(400);
-        }
+    @Test
+    void process2() {
+        Processor processor = new EvenSecondExceptionProcessor(
+            () -> LocalDateTime.of(5, Month.APRIL, 1, 1, 0, 3)
+        );
 
         assertDoesNotThrow(() -> processor.process(null));
     }
