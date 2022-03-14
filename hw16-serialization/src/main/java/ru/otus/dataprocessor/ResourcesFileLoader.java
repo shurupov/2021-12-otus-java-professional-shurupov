@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import ru.otus.jackson.MeasurementDeserializer;
 import ru.otus.model.Measurement;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class ResourcesFileLoader implements Loader {
@@ -33,8 +31,7 @@ public class ResourcesFileLoader implements Loader {
             InputStream inputStream = getClass().getResourceAsStream("/" + fileName);
             return mapper.readValue(inputStream, new TypeReference<List<Measurement>>() {});
         } catch (IOException e) {
-            System.out.println("File reading failed");
-            return List.of();
+            throw new FileProcessException(e);
         }
     }
 }

@@ -1,6 +1,5 @@
 package ru.otus.dataprocessor;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -21,10 +20,8 @@ public class FileSerializer implements Serializer {
     public void serialize(Map<String, Double> data) {
         try {
             mapper.writeValue(file, data);
-        } catch (JsonProcessingException e) {
-            System.out.println("Serialization failed. " + e);
         } catch (IOException e) {
-            System.out.println("File saving failed. " + e);
+            throw new FileProcessException(e);
         }
     }
 }
