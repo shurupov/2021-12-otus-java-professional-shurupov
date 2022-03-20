@@ -23,6 +23,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     @Override
     public Optional<T> findById(Connection connection, long id) {
         throw new UnsupportedOperationException();
+        //dbExecutor.executeSelect(connection, entitySQLMetaData.getSelectByIdSql(), List.of(id), )
     }
 
     @Override
