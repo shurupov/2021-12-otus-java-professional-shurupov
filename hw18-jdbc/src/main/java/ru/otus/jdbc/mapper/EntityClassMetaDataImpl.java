@@ -30,11 +30,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
         this.fieldsWithoutId = getAllFields().stream()
             .filter(f -> !f.isAnnotationPresent(Id.class))
             .collect(Collectors.toList());
-        this.constructor = clazz.getConstructor(
-            (Class<?>[]) fields.stream()
-                .map(Field::getType)
-                .toArray()
-        );
+        this.constructor = clazz.getConstructor();
     }
 
     @Override
