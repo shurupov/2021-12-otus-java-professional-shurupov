@@ -5,7 +5,6 @@ import ru.otus.crm.exception.IdAnnotatedFieldNotFoundException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +21,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
     public EntityClassMetaDataImpl(Class<T> clazz) throws NoSuchMethodException {
         this.clazz = clazz;
         this.name = clazz.getSimpleName();
-        this.fields = List.of(clazz.getFields());
+        this.fields = List.of(clazz.getDeclaredFields());
         this.idField = fields.stream()
             .filter(f -> f.isAnnotationPresent(Id.class))
             .findAny()

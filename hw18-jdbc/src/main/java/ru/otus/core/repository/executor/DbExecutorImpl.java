@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -36,7 +35,10 @@ public class DbExecutorImpl implements DbExecutor {
                 pst.setObject(idx + 1, params.get(idx));
             }
             try (var rs = pst.executeQuery()) {
-                return Optional.ofNullable(rsHandler.apply(rs));
+                if (rs.next()) {
+                    return Optional.ofNullable(rsHandler.apply(rs));
+                }
+                return Optional.empty();
             }
         } catch (SQLException ex) {
             throw new DataBaseOperationException("executeSelect error", ex);
