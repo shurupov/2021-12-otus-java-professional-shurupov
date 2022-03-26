@@ -41,6 +41,11 @@ public class HomeWork {
         var clientSecondSelected = dbServiceClient.getClient(clientSecond.getId())
                 .orElseThrow(() -> new RuntimeException("Client not found, id:" + clientSecond.getId()));
         log.info("clientSecondSelected:{}", clientSecondSelected);
+        log.info("client list:");
+        for (var client : dbServiceClient.findAll()) {
+            log.info("client: {}", client);
+        }
+        log.info("client list completed");
 
 // Сделайте тоже самое с классом Manager (для него надо сделать свою таблицу)
 
@@ -55,6 +60,11 @@ public class HomeWork {
         var managerSecondSelected = dbServiceManager.getManager(managerSecond.getNo())
                 .orElseThrow(() -> new RuntimeException("Manager not found, id:" + managerSecond.getNo()));
         log.info("managerSecondSelected:{}", managerSecondSelected);
+        log.info("manager list:");
+        for (var manager : dbServiceManager.findAll()) {
+            log.info("manager: {}", manager);
+        }
+        log.info("manager list completed");
     }
 
     private static void flywayMigrations(DataSource dataSource) {
