@@ -23,6 +23,10 @@ public class Phone {
     @Column(name = "id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
+    private Client client;
+
     @Column(name = "number")
     private String number;
 }
