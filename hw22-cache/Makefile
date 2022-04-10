@@ -4,4 +4,4 @@ startdb:
     -e POSTGRES_USER=usr \
     -e POSTGRES_DB=demoDB \
     -p 5430:5432 \
-    postgres:12
+    postgres:13
