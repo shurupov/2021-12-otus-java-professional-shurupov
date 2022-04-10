@@ -41,7 +41,7 @@ public class DbServiceClientImpl implements DBServiceClient {
     }
 
     @Override
-    public Optional<Client> getClient(long id) {
+    public Optional<Client> getClient(Long id) {
         Client cachedClient = cache.get(id);
         if (cachedClient != null) {
             return Optional.of(cachedClient);

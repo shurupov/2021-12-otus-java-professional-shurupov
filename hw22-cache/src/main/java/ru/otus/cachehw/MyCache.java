@@ -14,26 +14,26 @@ public class MyCache<K, V> implements HwCache<K, V> {
     @Override
     public void put(K key, V value) {
         innerCache.put(key, value);
-        listeners.forEach((l) -> {
-            l.notify(key, value, "PUT");
-        });
+        notify(key, null, "PUT");
     }
 
     @Override
     public void remove(K key) {
         innerCache.remove(key);
-        listeners.forEach((l) -> {
-            l.notify(key, null, "REMOVE");
-        });
+        notify(key, null, "REMOVE");
     }
 
     @Override
     public V get(K key) {
         V value = innerCache.get(key);
-        listeners.forEach((l) -> {
-            l.notify(key, value, "PUT");
-        });
+        notify(key, value, "GET");
         return value;
+    }
+
+    private void notify(K key, V value, String action) {
+        listeners.forEach((l) -> {
+            l.notify(key, value, action);
+        });
     }
 
     @Override
