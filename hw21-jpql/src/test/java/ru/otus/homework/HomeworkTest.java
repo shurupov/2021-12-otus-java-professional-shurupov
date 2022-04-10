@@ -61,8 +61,13 @@ class HomeworkTest {
             }
         });
 
-        var client = new Client(null, "Vasya", new Address(null, "AnyStreet"),
-            List.of(new Phone(null, "13-555-22"), new Phone(null, "14-666-333")));
+        var client = new Client(null, "Vasya");
+        client.setAddress(new Address(null, client, "AnyStreet"));
+        client.setPhones(List.of(
+            new Phone(null, client, "13-555-22"),
+            new Phone(null, client, "14-666-333")
+        ));
+
         try (var session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             session.persist(client);

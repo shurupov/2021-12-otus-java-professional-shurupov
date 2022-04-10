@@ -21,8 +21,12 @@ class DataTemplateHibernateTest extends AbstractHibernateTest {
     void shouldSaveAndFindCorrectClientById() {
         // Это надо раскомментировать, у выполненного ДЗ, все тесты должны проходить
         // Кроме удаления комментирования, тестовый класс менять нельзя
-        var client = new Client(null, "Vasya", new Address(null, "AnyStreet"), List.of(new Phone(null, "13-555-22"),
-                new Phone(null, "14-666-333")));
+        var client = new Client(null, "Vasya");
+        client.setAddress(new Address(null, client, "AnyStreet"));
+        client.setPhones(List.of(
+            new Phone(null, client, "13-555-22"),
+            new Phone(null, client, "14-666-333"))
+        );
 
         //when
         var savedClient = transactionManager.doInTransaction(session -> {

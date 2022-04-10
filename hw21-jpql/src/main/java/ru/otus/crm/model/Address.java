@@ -19,10 +19,19 @@ public class Address {
         this.street = street;
     }
 
+    public Address(Long id, Client client, String street) {
+        this.id = id;
+        this.client = client;
+        this.street = street;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @OneToOne(mappedBy = "address", cascade = CascadeType.PERSIST)
+    private Client client;
 
     @Column(name = "street")
     private String street;
