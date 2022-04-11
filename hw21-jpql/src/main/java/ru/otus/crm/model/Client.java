@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "client")
@@ -53,7 +54,18 @@ public class Client implements Cloneable {
 
     @Override
     public Client clone() {
-        return new Client(this.id, this.name, this.address, new ArrayList<>(this.phones));
+        Client client = new Client(this.id, this.name);
+        if (address != null) {
+            client.setAddress(new Address(address.getId(), client, address.getStreet()));
+        }
+        if (phones != null) {
+            client.setPhones(
+                phones.stream()
+                    .map(p -> new Phone(p.getId(), client, p.getNumber()))
+                    .collect(Collectors.toList())
+            );
+        }
+        return client;
     }
 
     @Override
