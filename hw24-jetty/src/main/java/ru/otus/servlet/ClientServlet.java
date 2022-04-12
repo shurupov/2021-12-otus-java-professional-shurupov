@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import ru.otus.crm.model.Address;
 import ru.otus.crm.model.Client;
 import ru.otus.crm.model.Phone;
+import ru.otus.crm.service.DBServiceClient;
 import ru.otus.crm.service.TemplateProcessor;
 
 import java.io.IOException;
@@ -15,32 +16,18 @@ import java.util.Map;
 public class ClientServlet extends HttpServlet {
 
     private final TemplateProcessor templateProcessor;
+    private final DBServiceClient dbServiceClient;
 
-    public ClientServlet(TemplateProcessor templateProcessor) {
+    public ClientServlet(TemplateProcessor templateProcessor, DBServiceClient dbServiceClient) {
         this.templateProcessor = templateProcessor;
+        this.dbServiceClient = dbServiceClient;
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         Map<String, Object> data = Map.of(
-            "clients", List.of(
-                Client.builder()
-                    .id(1L)
-                    .name("name")
-                    .address(Address.builder().street("Some street").build())
-                    .phones(
-                        List.of(
-                            Phone.builder()
-                                .number("12345")
-                                .build(),
-                            Phone.builder()
-                                .number("12345")
-                                .build()
-                        )
-                    )
-                    .build()
-            )
+            "clients", dbServiceClient.findAll()
         );
         response.getWriter().write(templateProcessor.getPage("clients.ftl", data));
     }

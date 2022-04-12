@@ -7,18 +7,14 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.resource.JarFileResource;
-import org.eclipse.jetty.util.resource.PathResource;
-import org.eclipse.jetty.util.resource.URLResource;
+import ru.otus.crm.service.DBServiceClient;
 import ru.otus.crm.service.TemplateProcessor;
 import ru.otus.servlet.ClientServlet;
 import ru.otus.servlet.IndexServlet;
 import ru.otus.util.FileSystemHelper;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 public class WebServerImpl implements WebServer {
 
@@ -27,10 +23,12 @@ public class WebServerImpl implements WebServer {
 
     private final Server server;
     private final TemplateProcessor templateProcessor;
+    private final DBServiceClient dbServiceClient;
 
-    public WebServerImpl(int port, TemplateProcessor templateProcessor) {
+    public WebServerImpl(int port, TemplateProcessor templateProcessor, DBServiceClient dbServiceClient) {
         server = new Server(port);
         this.templateProcessor = templateProcessor;
+        this.dbServiceClient = dbServiceClient;
     }
 
     @Override
@@ -73,7 +71,7 @@ public class WebServerImpl implements WebServer {
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(new IndexServlet()), "/");
-        servletContextHandler.addServlet(new ServletHolder(new ClientServlet(templateProcessor)), "/clients/*");
+        servletContextHandler.addServlet(new ServletHolder(new ClientServlet(templateProcessor, dbServiceClient)), "/clients/*");
         return servletContextHandler;
     }
 }
