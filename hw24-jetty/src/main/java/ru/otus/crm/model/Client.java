@@ -1,6 +1,7 @@
 package ru.otus.crm.model;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Table(name = "client")
 @Getter
 @Setter
+@Builder
 public class Client implements Cloneable {
 
     @Id

@@ -1,5 +1,6 @@
 package ru.otus.crm.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "address")
 @Getter
 @Setter
+@Builder
 public class Address {
 
     public Address() {
