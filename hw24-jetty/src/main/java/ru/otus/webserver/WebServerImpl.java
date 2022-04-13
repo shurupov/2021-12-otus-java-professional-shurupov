@@ -49,7 +49,7 @@ public class WebServerImpl implements WebServer {
 
     private void initContext() throws URISyntaxException, IOException {
         HandlerList handlers = new HandlerList();
-//        handlers.addHandler(createResourceHandler());
+        handlers.addHandler(createResourceHandler());
         handlers.addHandler(createServletContextHandler());
 //        handlers.addHandler(applySecurity(servletContextHandler, "/users", "/api/user/*"));
 
@@ -58,11 +58,9 @@ public class WebServerImpl implements WebServer {
     }
 
     private Handler createResourceHandler() throws URISyntaxException, IOException {
+        ContextHandler contextHandler = new ContextHandler("/static"); /* the server uri path */
         ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setDirectoriesListed(false);
         resourceHandler.setResourceBase(FileSystemHelper.localFileNameOrResourceNameToFullPath(COMMON_RESOURCES_DIR));
-
-        ContextHandler contextHandler= new ContextHandler("/static");
         contextHandler.setHandler(resourceHandler);
 
         return contextHandler;
