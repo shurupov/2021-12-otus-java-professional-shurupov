@@ -4,6 +4,7 @@ public interface Versions {
     String protobuf = "3.19.4";
     String testcontainers = "1.15.3";
 
-    String jetty = "11.0.7";
+    String jetty = "11.0.9";
     String freemarker = "2.3.31";
+    String commonsLang3 = "3.12.0";
 }
