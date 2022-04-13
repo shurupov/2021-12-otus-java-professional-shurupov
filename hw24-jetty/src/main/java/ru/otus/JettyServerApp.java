@@ -8,9 +8,7 @@ import ru.otus.crm.dbmigrations.MigrationsExecutorFlyway;
 import ru.otus.crm.model.Address;
 import ru.otus.crm.model.Client;
 import ru.otus.crm.model.Phone;
-import ru.otus.crm.service.DbServiceClientImpl;
-import ru.otus.crm.service.TemplateProcessor;
-import ru.otus.crm.service.TemplateProcessorImpl;
+import ru.otus.crm.service.*;
 import ru.otus.webserver.WebServer;
 import ru.otus.webserver.WebServerImpl;
 
@@ -42,7 +40,9 @@ public class JettyServerApp {
 
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
 
-        WebServer webServer = new WebServerImpl(WEB_SERVER_PORT, templateProcessor, dbServiceClient);
+        var authService = new UserAuthServiceImpl();
+
+        WebServer webServer = new WebServerImpl(WEB_SERVER_PORT, templateProcessor, dbServiceClient, authService);
         webServer.start();
         webServer.join();
     }

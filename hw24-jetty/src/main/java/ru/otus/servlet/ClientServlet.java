@@ -11,9 +11,7 @@ import ru.otus.crm.service.DBServiceClient;
 import ru.otus.crm.service.TemplateProcessor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -57,6 +55,6 @@ public class ClientServlet extends HttpServlet {
         dbServiceClient.saveClient(client);
 
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-        response.setHeader("Location", "/clients");
+        response.sendRedirect("/clients");
     }
 }
