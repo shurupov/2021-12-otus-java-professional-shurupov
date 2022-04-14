@@ -1,5 +1,7 @@
 package ru.otus.appcontainer;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 import ru.otus.appcontainer.api.AppComponent;
 import ru.otus.appcontainer.api.AppComponentsContainer;
 import ru.otus.appcontainer.api.AppComponentsContainerConfig;
@@ -14,51 +16,71 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private final List<Object> appComponents = new ArrayList<>();
     private final Map<String, Object> appComponentsByName = new HashMap<>();
 
-    public AppComponentsContainerImpl(Class<?> initialConfigClass) {
-        processConfig(initialConfigClass);
+    public AppComponentsContainerImpl(Class<?> ...initialConfigClass) {
+        processConfig(Arrays.stream(initialConfigClass).toList());
     }
 
-    private void processConfig(Class<?> configClass) {
-        checkConfigClass(configClass);
+    public AppComponentsContainerImpl(String packageName) {
+        Set<Class<?>> classes = getClasses(packageName);
+        processConfig(classes);
+    }
 
-        Object configObject = createConfigurationObject(configClass);
+    private Set<Class<?>> getClasses(String packageName) {
+        Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
+        return reflections.getSubTypesOf(Object.class);
+    }
 
-        Queue<Method> factoryMethods = getFactoryMethods(configClass);
+    private void processConfig(Collection<Class<?>> configClass) {
+        for (Class<?> clazz : configClass) {
+            checkConfigClass(clazz);
+        }
 
-        while (!factoryMethods.isEmpty()) {
-            Method method = factoryMethods.poll();
+        Queue<FactoryPair> factoryPairs = new LinkedList<>();
 
-            String componentName = method.getAnnotation(AppComponent.class).name();
+        for (Class<?> clazz : configClass) {
+            Object configObject = createConfigurationObject(clazz);
+            List<Method> methods = getFactoryMethods(clazz);
+            for (Method method : methods) {
+                factoryPairs.add(new FactoryPair(configObject, method));
+            }
+        }
 
-            Class<?>[] parametersClasses = method.getParameterTypes();
+        while (!factoryPairs.isEmpty()) {
+            FactoryPair factoryPair = factoryPairs.poll();
+
+            String componentName = factoryPair.method.getAnnotation(AppComponent.class).name();
+
+            Class<?>[] parametersClasses = factoryPair.method.getParameterTypes();
 
             Object[] parameters = new Object[parametersClasses.length];
 
-            boolean found = true;
-
-            for (int i = 0; i < parametersClasses.length; i++) {
-                final int ii = i;
-                Optional<Object> parameter = appComponents.stream()
-                    .filter(component -> isObjectClassOf(component, parametersClasses[ii]))
-                    .findAny();
-                if (parameter.isPresent()) {
-                    parameters[i] = parameter.get();
-                } else {
-                    found = false;
-                    break;
-                }
-            }
+            boolean found = findAndFillParameters(parametersClasses, parameters);
 
             if (!found) {
-                factoryMethods.add(method);
+                factoryPairs.add(factoryPair);
                 continue;
             }
 
-            Object component = createComponent(method, configObject, parameters);
+            Object component = createComponent(factoryPair.method, factoryPair.configObject, parameters);
 
             appComponents.add(component);
             appComponentsByName.put(componentName, component);
         }
+    }
+
+    private boolean findAndFillParameters(Class<?>[] parametersClasses, Object[] parameters) {
+        for (int i = 0; i < parametersClasses.length; i++) {
+            final int ii = i;
+            Optional<Object> parameter = appComponents.stream()
+                .filter(component -> isObjectClassOf(component, parametersClasses[ii]))
+                .findAny();
+            if (parameter.isPresent()) {
+                parameters[i] = parameter.get();
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void checkConfigClass(Class<?> configClass) {
@@ -98,8 +120,8 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         }
     }
 
-    private Queue<Method> getFactoryMethods(Class<?> configClass) {
-        Queue<Method> factoryMethods = new LinkedList<>();
+    private List<Method> getFactoryMethods(Class<?> configClass) {
+        List<Method> factoryMethods = new ArrayList<>();
 
         for (Method method : configClass.getMethods()) {
             if (method.isAnnotationPresent(AppComponent.class)) {
@@ -118,6 +140,16 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                 "Can't create an instance of a component",
                 e
             );
+        }
+    }
+
+    private static class FactoryPair {
+        Object configObject;
+        Method method;
+
+        public FactoryPair(Object configObject, Method method) {
+            this.configObject = configObject;
+            this.method = method;
         }
     }
 }
