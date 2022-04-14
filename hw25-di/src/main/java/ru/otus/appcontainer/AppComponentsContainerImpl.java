@@ -21,24 +21,9 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private void processConfig(Class<?> configClass) {
         checkConfigClass(configClass);
 
-        Object configObject;
+        Object configObject = createConfigurationObject(configClass);
 
-        try {
-            configObject = configClass.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new ContainerInjectionException(
-                "Can't create an instance of configuration class",
-                e
-            );
-        }
-
-        Queue<Method> factoryMethods = new LinkedList<>();
-
-        for (Method method : configClass.getMethods()) {
-            if (method.isAnnotationPresent(AppComponent.class)) {
-                factoryMethods.add(method);
-            }
-        }
+        Queue<Method> factoryMethods = getFactoryMethods(configClass);
 
         while (!factoryMethods.isEmpty()) {
             Method method = factoryMethods.poll();
@@ -69,16 +54,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                 continue;
             }
 
-            Object component;
-
-            try {
-                component = method.invoke(configObject, parameters);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new ContainerInjectionException(
-                    "Can't create an instance of a component",
-                    e
-                );
-            }
+            Object component = createComponent(method, configObject, parameters);
 
             appComponents.add(component);
             appComponentsByName.put(componentName, component);
@@ -109,5 +85,39 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         classes.addAll(List.of(object.getClass().getClasses()));
         classes.add(object.getClass());
         return classes.contains(clazz);
+    }
+
+    private Object createConfigurationObject(Class<?> configClass) {
+        try {
+            return configClass.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new ContainerInjectionException(
+                "Can't create an instance of configuration class",
+                e
+            );
+        }
+    }
+
+    private Queue<Method> getFactoryMethods(Class<?> configClass) {
+        Queue<Method> factoryMethods = new LinkedList<>();
+
+        for (Method method : configClass.getMethods()) {
+            if (method.isAnnotationPresent(AppComponent.class)) {
+                factoryMethods.add(method);
+            }
+        }
+
+        return factoryMethods;
+    }
+
+    private Object createComponent(Method method, Object configObject, Object... parameters) {
+        try {
+            return method.invoke(configObject, parameters);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new ContainerInjectionException(
+                "Can't create an instance of a component",
+                e
+            );
+        }
     }
 }
