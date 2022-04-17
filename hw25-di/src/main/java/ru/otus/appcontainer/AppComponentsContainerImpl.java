@@ -31,26 +31,16 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         return reflections.getSubTypesOf(Object.class);
     }
 
-    private void processConfig(Collection<Class<?>> configClass) {
-        for (Class<?> clazz : configClass) {
+    private void processConfig(Collection<Class<?>> configClasses) {
+        for (Class<?> clazz : configClasses) {
             checkConfigClass(clazz);
         }
 
-        Queue<FactoryPair> factoryPairs = new LinkedList<>();
-
-        for (Class<?> clazz : configClass) {
-            Object configObject = createConfigurationObject(clazz);
-            List<Method> methods = getFactoryMethods(clazz);
-            for (Method method : methods) {
-                factoryPairs.add(new FactoryPair(configObject, method));
-            }
-        }
+        Queue<FactoryPair> factoryPairs = prepareDefinitions(configClasses);
 
         int notFound = 0;
         while (!factoryPairs.isEmpty()) {
             FactoryPair factoryPair = factoryPairs.poll();
-
-            String componentName = factoryPair.method.getAnnotation(AppComponent.class).name();
 
             Class<?>[] parametersClasses = factoryPair.method.getParameterTypes();
 
@@ -69,15 +59,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
             notFound = 0;
 
-            Object component = createComponent(factoryPair.method, factoryPair.configObject, parameters);
-
-            appComponents.add(component);
-            if (appComponentsByName.containsKey(componentName)) {
-                throw new ContainerInjectionException(
-                    String.format("Container already contains component with name \"%s\"", componentName)
-                );
-            }
-            appComponentsByName.put(componentName, component);
+            addComponent(factoryPair, parameters);
         }
     }
 
@@ -125,6 +107,32 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                 e
             );
         }
+    }
+
+    private Queue<FactoryPair> prepareDefinitions(Collection<Class<?>> configClasses) {
+        Queue<FactoryPair> factoryPairs = new LinkedList<>();
+
+        for (Class<?> clazz : configClasses) {
+            Object configObject = createConfigurationObject(clazz);
+            List<Method> methods = getFactoryMethods(clazz);
+            for (Method method : methods) {
+                factoryPairs.add(new FactoryPair(configObject, method));
+            }
+        }
+        return factoryPairs;
+    }
+
+    private void addComponent(FactoryPair factoryPair, Object[] parameters) {
+        Object component = createComponent(factoryPair.method, factoryPair.configObject, parameters);
+        String componentName = factoryPair.method.getAnnotation(AppComponent.class).name();
+
+        appComponents.add(component);
+        if (appComponentsByName.containsKey(componentName)) {
+            throw new ContainerInjectionException(
+                String.format("Container already contains component with name \"%s\"", componentName)
+            );
+        }
+        appComponentsByName.put(componentName, component);
     }
 
     private List<Method> getFactoryMethods(Class<?> configClass) {
