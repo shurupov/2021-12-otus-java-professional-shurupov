@@ -10,6 +10,7 @@ import ru.otus.exception.ContainerInjectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AppComponentsContainerImpl implements AppComponentsContainer {
 
@@ -45,6 +46,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
             }
         }
 
+        int notFound = 0;
         while (!factoryPairs.isEmpty()) {
             FactoryPair factoryPair = factoryPairs.poll();
 
@@ -52,35 +54,41 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
             Class<?>[] parametersClasses = factoryPair.method.getParameterTypes();
 
-            Object[] parameters = new Object[parametersClasses.length];
+            Object[] parameters;
 
-            boolean found = findAndFillParameters(parametersClasses, parameters);
-
-            if (!found) {
+            try {
+                parameters = findAndFillParameters(parametersClasses);
+            } catch (ContainerInjectionException e) {
                 factoryPairs.add(factoryPair);
+                notFound++;
+                if (notFound > factoryPairs.size()) {
+                    throw new ContainerInjectionException("Unable to satisfy all dependencies");
+                }
                 continue;
             }
+
+            notFound = 0;
 
             Object component = createComponent(factoryPair.method, factoryPair.configObject, parameters);
 
             appComponents.add(component);
+            if (appComponentsByName.containsKey(componentName)) {
+                throw new ContainerInjectionException(
+                    String.format("Container already contains component with name \"%s\"", componentName)
+                );
+            }
             appComponentsByName.put(componentName, component);
         }
     }
 
-    private boolean findAndFillParameters(Class<?>[] parametersClasses, Object[] parameters) {
+    private Object[] findAndFillParameters(Class<?>[] parametersClasses) {
+        Object[] parameters = new Object[parametersClasses.length];
         for (int i = 0; i < parametersClasses.length; i++) {
             final int ii = i;
-            Optional<Object> parameter = appComponents.stream()
-                .filter(component -> isObjectClassOf(component, parametersClasses[ii]))
-                .findAny();
-            if (parameter.isPresent()) {
-                parameters[i] = parameter.get();
-            } else {
-                return false;
-            }
+            Object parameter = getAppComponent(parametersClasses[ii]);
+            parameters[i] = parameter;
         }
-        return true;
+        return parameters;
     }
 
     private void checkConfigClass(Class<?> configClass) {
@@ -91,22 +99,21 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
-        return (C) appComponents.stream()
-            .filter(component -> isObjectClassOf(component, componentClass))
-            .findAny()
-            .orElse(null);
+        List<C> found =  (List<C>) appComponents.stream()
+            .filter(component -> componentClass.isAssignableFrom(component.getClass()))
+            .collect(Collectors.toList());
+        if (found.size() > 1) {
+            throw new ContainerInjectionException("Found more than two component candidates");
+        }
+        if (found.isEmpty()) {
+            throw new ContainerInjectionException("Component candidates not found");
+        }
+        return found.get(0);
     }
 
     @Override
     public <C> C getAppComponent(String componentName) {
         return (C) appComponentsByName.get(componentName);
-    }
-
-    private boolean isObjectClassOf(Object object, Class<?> clazz) {
-        List<Class<?>> classes = new ArrayList<>(List.of(object.getClass().getInterfaces()));
-        classes.addAll(List.of(object.getClass().getClasses()));
-        classes.add(object.getClass());
-        return classes.contains(clazz);
     }
 
     private Object createConfigurationObject(Class<?> configClass) {
