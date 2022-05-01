@@ -1,6 +1,7 @@
 create table address
 (
     id   bigserial primary key,
+    client_id bigint references client(id),
     street varchar(50)
 );
 
@@ -11,5 +12,3 @@ create table phone
     number varchar(50)
 );
 
-alter table client
-    add address_id bigint references address(id);

@@ -9,6 +9,11 @@ spring:
     driver-class-name: org.postgresql.Driver
   sql.init.mode: NEVER
 
+  flyway:
+    enabled: true
+    user: usr
+    password: pwd
+
   freemarker:
     template-loader-path: classpath:/templates
     suffix: .ftl

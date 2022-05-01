@@ -6,10 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Bootstrap CSS -->
-        <#--<link href="/static/bootstrap.min.css" rel="stylesheet">-->
         <link href="/static/bootstrap.min.css" rel="stylesheet">
 
-        <title>Hello, world!</title>
+        <title>Clients!</title>
     </head>
     <body>
         <div class="container">
@@ -20,8 +19,8 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
-<#--                    <th scope="col">Address</th>-->
-<#--                    <th scope="col">Phones</th>-->
+                    <th scope="col">Address</th>
+                    <th scope="col">Phones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,8 +28,8 @@
                     <tr>
                         <td scope="row">${client.id}</td>
                         <td>${client.name}</td>
-<#--                        <td>${client.address.street}</td>-->
-<#--                        <td><#list client.phones as phone>${phone.number}<#sep>, </#sep></#list></td>-->
+                        <td>${client.address.street}</td>
+                        <td><#list client.phones as phone>${phone.number}<#sep>, </#sep></#list></td>
                     </tr>
                 </#list>
                 </tbody>

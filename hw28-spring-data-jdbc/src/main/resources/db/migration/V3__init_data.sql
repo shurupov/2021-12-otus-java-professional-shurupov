@@ -1,14 +1,14 @@
-insert into address (street)
-    values
-    ('Aerodromnaya street'),
-    ('Lenina prospect'),
-    ('Novo-Sadovaya street');
+insert into client (id, name)
+values
+    (1, 'Pushkin'),
+    (2, 'Ivanov'),
+    (3, 'Petrov');
 
-insert into client (id, name, address_id)
+insert into address (client_id, street)
     values
-    (1, 'Pushkin', 1),
-    (2, 'Ivanov', 2),
-    (3, 'Petrov', 3);
+    (1, 'Aerodromnaya street'),
+    (2, 'Lenina prospect'),
+    (3, 'Novo-Sadovaya street');
 
 insert into phone (client_id, number)
     values
