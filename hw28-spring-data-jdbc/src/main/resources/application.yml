@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: core
+
+  datasource:
+    url: jdbc:postgresql://localhost:5430/demoDB
+    username: usr
+    password: pwd
+    driver-class-name: org.postgresql.Driver
+  sql.init.mode: NEVER
+
+spring.freemarker:
+  template-loader-path: classpath:/templates
+  suffix: .ftl
