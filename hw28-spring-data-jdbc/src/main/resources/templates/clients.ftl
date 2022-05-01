@@ -20,8 +20,8 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Phones</th>
+<#--                    <th scope="col">Address</th>-->
+<#--                    <th scope="col">Phones</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -29,8 +29,8 @@
                     <tr>
                         <td scope="row">${client.id}</td>
                         <td>${client.name}</td>
-                        <td>${client.address.street}</td>
-                        <td><#list client.phones as phone>${phone.number}<#sep>, </#sep></#list></td>
+<#--                        <td>${client.address.street}</td>-->
+<#--                        <td><#list client.phones as phone>${phone.number}<#sep>, </#sep></#list></td>-->
                     </tr>
                 </#list>
                 </tbody>

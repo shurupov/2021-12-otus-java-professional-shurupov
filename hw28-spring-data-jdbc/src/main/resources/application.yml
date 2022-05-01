@@ -1,6 +1,6 @@
 spring:
-  application:
-    name: core
+  mvc.static-path-pattern: /static/**
+  web.resources.static-locations: classpath:/static
 
   datasource:
     url: jdbc:postgresql://localhost:5430/demoDB
@@ -9,6 +9,6 @@ spring:
     driver-class-name: org.postgresql.Driver
   sql.init.mode: NEVER
 
-spring.freemarker:
-  template-loader-path: classpath:/templates
-  suffix: .ftl
+  freemarker:
+    template-loader-path: classpath:/templates
+    suffix: .ftl
