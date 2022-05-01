@@ -3,7 +3,7 @@ spring:
   web.resources.static-locations: classpath:/static
 
   datasource:
-    url: jdbc:postgresql://localhost:5430/demoDB
+    url: jdbc:postgresql://localhost:5432/demoDB
     username: usr
     password: pwd
     driver-class-name: org.postgresql.Driver
@@ -13,6 +13,7 @@ spring:
     enabled: true
     user: usr
     password: pwd
+    url: jdbc:postgresql://localhost:5432/demoDB
 
   freemarker:
     template-loader-path: classpath:/templates

@@ -1,17 +1,29 @@
 package ru.otus.shurupov.springdatajdbc.domain;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("phone")
-@RequiredArgsConstructor
 @Getter
 public class Phone {
 
     @Id
     private final Long id;
 
+    private final Long clientId;
+
     private final String number;
+
+    @PersistenceConstructor
+    public Phone(Long id, Long clientId, String number) {
+        this.id = id;
+        this.clientId = clientId;
+        this.number = number;
+    }
+
+    public Phone(Long clientId, String number) {
+        this(null, clientId, number);
+    }
 }

@@ -1,8 +1,8 @@
-insert into client (id, name)
+insert into client (name)
 values
-    (1, 'Pushkin'),
-    (2, 'Ivanov'),
-    (3, 'Petrov');
+    ('Pushkin'),
+    ('Ivanov'),
+    ('Petrov');
 
 insert into address (client_id, street)
     values
@@ -18,5 +18,3 @@ insert into phone (client_id, number)
     (2, '456789'),
     (2, '567890'),
     (3, '678901');
-
-alter sequence hibernate_sequence restart with 10;
