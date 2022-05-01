@@ -8,46 +8,32 @@
         <!-- Bootstrap CSS -->
         <link href="/static/bootstrap.min.css" rel="stylesheet">
 
-        <title>Clients!</title>
+        <title>Edit client</title>
     </head>
     <body>
         <div class="container">
             <h1>Clients</h1>
-            <h2>Clients list</h2>
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Phones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <#list clients as client>
-                    <tr>
-                        <td scope="row">${client.id}</td>
-                        <td>${client.name}</td>
-                        <td>${client.address.street}</td>
-                        <td><#list client.phones as phone>${phone.number}<#sep>, </#sep></#list></td>
-                    </tr>
-                </#list>
-                </tbody>
-            </table>
 
-            <h2>Add a client</h2>
-            <form method="post" action="/add">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                </ol>
+            </nav>
+
+            <h2>Create a client</h2>
+            <form method="post" action="">
 
                 <div class="container">
                     <div class="row">
                         <div class="col">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" name="name">
+                                <input type="text" class="form-control" id="name" name="name" value="${client.name}">
                             </div>
                             <div class="mb-3">
                                 <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" name="address">
+                                <input type="text" class="form-control" id="address" name="address" value="${client.address.street}">
                             </div>
 
                         </div>
@@ -55,15 +41,15 @@
 
                             <div class="mb-3">
                                 <label for="phone1" class="form-label">Phone 1</label>
-                                <input type="text" class="form-control" id="phone1" name="phones">
+                                <input type="text" class="form-control" id="phone1" name="phones" value="${client.phones[0].number}">
                             </div>
                             <div class="mb-3">
                                 <label for="phone2" class="form-label">Phone 2</label>
-                                <input type="text" class="form-control" id="phone2" name="phones">
+                                <input type="text" class="form-control" id="phone2" name="phones" value="${client.phones[1].number}">
                             </div>
                             <div class="mb-3">
                                 <label for="phone3" class="form-label">Phone 3</label>
-                                <input type="text" class="form-control" id="phone3" name="phones">
+                                <input type="text" class="form-control" id="phone3" name="phones" value="${client.phones[2].number!}">
                             </div>
                         </div>
                     </div>
