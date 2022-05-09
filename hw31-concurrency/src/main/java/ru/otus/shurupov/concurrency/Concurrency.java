@@ -1,31 +1,35 @@
 package ru.otus.shurupov.concurrency;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Concurrency {
+
+    private static final Logger logger = LoggerFactory.getLogger(Concurrency.class);
 
     private int current = 0;
 
     private int step = 1;
 
-    public synchronized void doIt(boolean update) {
+    private int lastThread = 2;
 
-        while (!update) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
+    public synchronized void doIt(boolean update, int thread) {
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
+                while (lastThread == thread) {
+                    this.wait();
+                }
                 if (update) {
                     updateValue();
                 }
-                System.out.printf("[%s] %s%n", Thread.currentThread().getName(), current);
+                logger.info(Integer.toString(current));
+                lastThread = thread;
                 sleep();
                 this.notifyAll();
-                this.wait();
+
             } catch (InterruptedException e) {
+                logger.error(e.getMessage(), e);
                 Thread.currentThread().interrupt();
             }
         }
@@ -45,6 +49,7 @@ public class Concurrency {
         try {
             Thread.sleep(1_000);
         } catch (InterruptedException e) {
+            logger.error(e.getMessage(), e);
             Thread.currentThread().interrupt();
         }
     }
@@ -53,7 +58,7 @@ public class Concurrency {
 
         Concurrency object = new Concurrency();
 
-        new Thread(() -> object.doIt(true), "Thread 1").start();
-        new Thread(() -> object.doIt(false), "Thread 2").start();
+        new Thread(() -> object.doIt(true, 1), "Thread 1").start();
+        new Thread(() -> object.doIt(false,2), "Thread 2").start();
     }
 }
