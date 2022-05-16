@@ -1,8 +1,11 @@
 package ru.otus.api.model;
 
 
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
+@ToString
 public class SensorData {
     private final LocalDateTime measurementTime;
     private final String room;
