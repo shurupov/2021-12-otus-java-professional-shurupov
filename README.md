@@ -9,7 +9,13 @@ Certificate: (will be later)
 <details>
   <summary>Keywords: </summary>
 
-`Gradle`, `Generics`, `Annotations`, `Garbage Collector`
+`Gradle`, `Generics`, `Annotations`, `Garbage Collector`,
+`byte code`, `Reflection`, `AOP`, `Classloader`,
+`SOLID`, `Patterns`, `GoF`, `Serilization`, `JSON`, 
+`JDBC`, `RDBMS`, `Hikari`, `Flyway`, `Hibernate`, `JPA`,
+`Cache`, `Servlet`, `Jetty`, `Dependency injection`,
+`Spring Data JDBC`, `Concurrency`, `synchronized`,
+`monitor`, `thread`, `Concurrent collections`
 </details>
 
 ## Modules/Homeworks
@@ -21,3 +27,12 @@ Certificate: (will be later)
 - [Byte Code and Java Proxies](hw10-bytecode)
 - [SOLID](hw12-solid)
 - [GoF Patterns](hw15-patterns)
+- [Serialization](hw16-serialization)
+- [JDBC](hw18-jdbc)
+- [JPA, Hibernate](hw21-jpql)
+- [Cache](hw22-cache)
+- [Servlet, Jetty](hw24-jetty)
+- [Dependency Injection](hw25-di)
+- [Spring Data Jdbc](hw28-spring-data-jdbc)
+- [Concurrency, Thread, Monitor](hw31-concurrency)
+- [Concurrent Collections](hw32-queues)
