@@ -23,7 +23,9 @@ public class NumberProcessor {
     public void process(Runnable waitAndComplete) {
         int number = 0;
         for (int i = from; i < to; i++) {
-            number += received + 1;
+            synchronized (this) {
+                number += received + 1;
+            }
             logger.info("{}: value: {}", i, number);
             Sleeper.sleep(1);
         }
