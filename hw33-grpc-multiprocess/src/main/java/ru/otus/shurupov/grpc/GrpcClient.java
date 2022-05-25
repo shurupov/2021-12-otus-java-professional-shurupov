@@ -24,16 +24,13 @@ public class GrpcClient {
             .usePlaintext()
             .build();
 
-//        var blockingStub = NumberGeneratorGrpc.newBlockingStub(channel);
-//        ProcessExecutor processExecutor = new IterationProcessExecutor(pool, numberProcessor, blockingStub);
+        var blockingStub = NumberGeneratorGrpc.newBlockingStub(channel);
+        ProcessExecutor processExecutor = new IterationProcessExecutor(pool, numberProcessor, blockingStub);
 
-        var streamStub = NumberGeneratorGrpc.newStub(channel);
-        ProcessExecutor processExecutor = new ObserverProcessExecutor(pool, numberProcessor, streamStub);
+//        var streamStub = NumberGeneratorGrpc.newStub(channel);
+//        ProcessExecutor processExecutor = new ObserverProcessExecutor(pool, numberProcessor, streamStub);
 
         processExecutor.process(1, 20);
-
-
-
 
         channel.shutdown();
         pool.shutdown();

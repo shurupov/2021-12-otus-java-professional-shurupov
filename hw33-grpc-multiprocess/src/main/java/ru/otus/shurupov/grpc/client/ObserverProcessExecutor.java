@@ -1,6 +1,8 @@
 package ru.otus.shurupov.grpc.client;
 
 import io.grpc.stub.StreamObserver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.protobuf.generated.NumberGeneratorGrpc;
 import ru.otus.protobuf.generated.NumberGeneratorService;
 
@@ -8,6 +10,8 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 
 public class ObserverProcessExecutor extends ProcessExecutor {
+
+    private static final Logger logger = LoggerFactory.getLogger(ObserverProcessExecutor.class);
 
     private final NumberGeneratorGrpc.NumberGeneratorStub stub;
 
@@ -37,7 +41,7 @@ public class ObserverProcessExecutor extends ProcessExecutor {
 
         @Override
         public void onNext(NumberGeneratorService.NumberMessage numberMessage) {
-            System.out.println("Received: " + numberMessage.getNumber());
+            logger.info("Received: {}", numberMessage.getNumber());
         }
 
         @Override
@@ -47,7 +51,7 @@ public class ObserverProcessExecutor extends ProcessExecutor {
 
         @Override
         public void onCompleted() {
-            System.out.println("Observe completed");
+            logger.info("Observe completed");
             latch.countDown();
         }
     }
