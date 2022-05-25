@@ -11,7 +11,7 @@ Certificate: (will be later)
 
 `Gradle`, `Generics`, `Annotations`, `Garbage Collector`,
 `byte code`, `Reflection`, `AOP`, `Classloader`,
-`SOLID`, `Patterns`, `GoF`, `Serilization`, `JSON`, 
+`SOLID`, `Patterns`, `GoF`, `Serialization`, `JSON`, 
 `JDBC`, `RDBMS`, `Hikari`, `Flyway`, `Hibernate`, `JPA`,
 `Cache`, `Servlet`, `Jetty`, `Dependency injection`,
 `Spring Data JDBC`, `Concurrency`, `synchronized`,
