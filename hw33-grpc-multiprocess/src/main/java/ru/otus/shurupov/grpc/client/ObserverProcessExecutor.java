@@ -1,40 +1,33 @@
 package ru.otus.shurupov.grpc.client;
 
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.protobuf.generated.NumberGeneratorGrpc;
 import ru.otus.protobuf.generated.NumberGeneratorService;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
 
-public class ObserverProcessExecutor extends ProcessExecutor {
+@RequiredArgsConstructor
+public class ObserverProcessExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(ObserverProcessExecutor.class);
 
+    private final NumberProcessor numberProcessor;
     private final NumberGeneratorGrpc.NumberGeneratorStub stub;
 
-    public ObserverProcessExecutor(ExecutorService executorService,
-                                   NumberProcessor numberProcessor,
-                                   NumberGeneratorGrpc.NumberGeneratorStub stub) {
-        super(executorService, numberProcessor);
-        this.stub = stub;
-    }
+    public void process(int from, int to) throws InterruptedException {
 
-    @Override
-    protected void request(int from, int to) {
         stub.generate(
             NumberGeneratorService.RunMessage.newBuilder()
-                .setFrom(1)
-                .setTo(20)
+                .setFrom(from)
+                .setTo(to)
                 .build(),
             new NumberMessageStreamObserver()
         );
-    }
 
-    @Override
-    protected void processReceivedNumbers() {
+        numberProcessor.process();
     }
 
     private class NumberMessageStreamObserver implements StreamObserver<NumberGeneratorService.NumberMessage> {
@@ -42,6 +35,7 @@ public class ObserverProcessExecutor extends ProcessExecutor {
         @Override
         public void onNext(NumberGeneratorService.NumberMessage numberMessage) {
             logger.info("Received: {}", numberMessage.getNumber());
+            numberProcessor.setReceived(numberMessage.getNumber());
         }
 
         @Override
@@ -52,7 +46,6 @@ public class ObserverProcessExecutor extends ProcessExecutor {
         @Override
         public void onCompleted() {
             logger.info("Observe completed");
-            latch.countDown();
         }
     }
 }

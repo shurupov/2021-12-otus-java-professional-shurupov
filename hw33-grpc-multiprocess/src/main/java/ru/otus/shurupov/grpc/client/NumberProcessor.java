@@ -20,15 +20,14 @@ public class NumberProcessor {
         logger.info("received: {}", received);
     }
 
-    public void process(Runnable waitAndComplete) {
+    public void process() {
         int number = 0;
         for (int i = from; i < to; i++) {
             synchronized (this) {
                 number += received + 1;
             }
-            logger.info("{}: value: {}", i, number);
+            logger.info("iteration: {}, received: {}, value: {}", i, received, number);
             Sleeper.sleep(1);
         }
-        waitAndComplete.run();
     }
 }
