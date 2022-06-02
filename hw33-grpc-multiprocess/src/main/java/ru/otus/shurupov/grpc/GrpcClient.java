@@ -3,7 +3,6 @@ package ru.otus.shurupov.grpc;
 import io.grpc.ManagedChannelBuilder;
 import ru.otus.protobuf.generated.NumberGeneratorGrpc;
 import ru.otus.shurupov.grpc.client.NumberProcessor;
-import ru.otus.shurupov.grpc.client.ObserverProcessExecutor;
 
 public class GrpcClient {
 
@@ -16,9 +15,7 @@ public class GrpcClient {
     private static final int CLIENT_NUMBER_START = 0;
     private static final int CLIENT_NUMBER_END = 50;
 
-    public static void main(String[] args) throws InterruptedException {
-
-        var numberProcessor = new NumberProcessor(CLIENT_NUMBER_START, CLIENT_NUMBER_END);
+    public static void main(String[] args) {
 
         var channel = ManagedChannelBuilder
             .forAddress(SERVER_HOST, SERVER_PORT)
@@ -26,9 +23,10 @@ public class GrpcClient {
             .build();
 
         var streamStub = NumberGeneratorGrpc.newStub(channel);
-        ObserverProcessExecutor processExecutor = new ObserverProcessExecutor(numberProcessor, streamStub);
 
-        processExecutor.process(SERVER_NUMBER_START, SERVER_NUMBER_END);
+        var numberProcessor = new NumberProcessor(streamStub, CLIENT_NUMBER_START, CLIENT_NUMBER_END);
+
+        numberProcessor.start(SERVER_NUMBER_START, SERVER_NUMBER_END);
 
         channel.shutdown();
     }
