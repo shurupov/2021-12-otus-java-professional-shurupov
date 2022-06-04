@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package ru.otus.protobuf.generated;
+
+import "google/protobuf/empty.proto";
+
+message RunMessage {
+  int32 from = 1;
+  int32 to = 2;
+}
+
+message NumberMessage {
+  int32 number = 1;
+}
+
+service NumberGenerator {
+  rpc generate(RunMessage) returns (stream NumberMessage);
+}
