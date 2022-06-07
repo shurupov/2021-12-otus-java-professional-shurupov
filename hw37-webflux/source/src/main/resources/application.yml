@@ -1,0 +1,17 @@
+spring:
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/flux
+    username: usr
+    password: pwd
+    driver-class-name: org.postgresql.Driver
+  sql.init.mode: NEVER
+
+  flyway:
+    enabled: true
+    user: usr
+    password: pwd
+    url: jdbc:postgresql://localhost:5432/flux
+
+server:
+  port: 8080
