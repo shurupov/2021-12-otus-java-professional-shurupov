@@ -26,8 +26,4 @@ public class Address {
         this.clientId = clientId;
         this.street = street;
     }
-
-    public Address(Long clientId, String street) {
-        this(null, clientId, street);
-    }
 }
