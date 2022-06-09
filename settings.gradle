@@ -18,4 +18,5 @@ include 'hw32-concurrent-collections'
 include 'hw33-grpc-multiprocess'
 
 include 'hw37-webflux:source'
+include 'hw37-webflux:service'
 
