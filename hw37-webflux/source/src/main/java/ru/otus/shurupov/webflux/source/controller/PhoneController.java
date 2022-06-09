@@ -6,41 +6,40 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.shurupov.webflux.source.domain.Phone;
-import ru.otus.shurupov.webflux.source.repository.PhoneRepository;
+import ru.otus.shurupov.webflux.source.service.PhoneService;
 
 @RestController
 @RequiredArgsConstructor
 public class PhoneController {
-
-    private final PhoneRepository phoneRepository;
+    private final PhoneService phoneService;
 
     @GetMapping(value = "/api/phones", produces = MediaType.APPLICATION_NDJSON_VALUE)
-    public Flux<Phone> getAll() {
-        return Flux.fromIterable(phoneRepository.findAll());
+    public Flux<Phone> getAll(@RequestParam(required = false) Long clientId) {
+        return phoneService.getAll(clientId);
     }
 
     @GetMapping(value = "/api/phones/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public Mono<Phone> get(@PathVariable Long id) {
-        return Mono.fromCallable(() -> phoneRepository.findById(id).orElseThrow());
+        return phoneService.get(id);
     }
 
     @PostMapping(value = "/api/phones", produces = MediaType.APPLICATION_NDJSON_VALUE)
-    public Mono<Phone> add(@RequestBody Mono<Phone> phoneMono) {
-        return phoneMono.map(phoneRepository::save);
+    public Mono<Phone> add(@RequestBody Phone phone) {
+        return phoneService.add(phone);
     }
 
     @PutMapping(value = "/api/phones/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
-    public Mono<Phone> update(@PathVariable Long id, @RequestBody Mono<Phone> phoneMono) {
-        return phoneMono
-            .map(phone -> phone.toBuilder().id(id).build())
-            .map(phoneRepository::save);
+    public Mono<Phone> update(@PathVariable Long id, @RequestBody Phone phone) {
+        return phoneService.update(id, phone);
     }
 
     @DeleteMapping(value = "/api/phones/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public Mono<Void> remove(@PathVariable Long id) {
-        return Mono.fromCallable(() -> {
-            phoneRepository.deleteById(id);
-            return null;
-        });
+        return phoneService.remove(id);
+    }
+
+    @DeleteMapping(value = "/api/phones", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Mono<Void> removeByClientId(@RequestParam Long clientId) {
+        return phoneService.removeByClientId(clientId);
     }
 }

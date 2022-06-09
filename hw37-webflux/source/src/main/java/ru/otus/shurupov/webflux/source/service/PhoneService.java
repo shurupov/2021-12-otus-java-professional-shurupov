@@ -4,66 +4,56 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.otus.shurupov.webflux.source.domain.Address;
-import ru.otus.shurupov.webflux.source.repository.AddressRepository;
+import ru.otus.shurupov.webflux.source.domain.Phone;
+import ru.otus.shurupov.webflux.source.repository.PhoneRepository;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
 @Service
 @RequiredArgsConstructor
-public class AddressService {
-    private final AddressRepository addressRepository;
+public class PhoneService {
+    private final PhoneRepository phoneRepository;
     private final ExecutorService executorService;
 
-    public Flux<Address> getAll(Long clientId) {
-        CompletableFuture<Iterable<Address>> future;
+    public Flux<Phone> getAll(Long clientId) {
+        CompletableFuture<Iterable<Phone>> future;
         if (clientId != null) {
             future = CompletableFuture
-                .supplyAsync(
-                    () -> addressRepository.findTopByClientId(clientId).stream().toList(),
-                    executorService
-                );
+                .supplyAsync(() -> phoneRepository.findByClientId(clientId), executorService);
         } else {
             future = CompletableFuture
-                .supplyAsync(addressRepository::findAll, executorService);
+                .supplyAsync(phoneRepository::findAll, executorService);
         }
 
         return Mono.fromFuture(future).flatMapMany(Flux::fromIterable);
     }
 
-    public Mono<Address> get(Long id) {
+    public Mono<Phone> get(Long id) {
         var future = CompletableFuture
-            .supplyAsync(() -> addressRepository.findById(id).orElseThrow(), executorService);
+            .supplyAsync(() -> phoneRepository.findById(id).orElseThrow(), executorService);
         return Mono.fromFuture(future);
     }
 
-    public Mono<Address> getByClientId(Long clientId) {
+    public Mono<Phone> add(Phone phone) {
         var future = CompletableFuture
-            .supplyAsync(() -> addressRepository.findTopByClientId(clientId).orElse(null), executorService);
+            .supplyAsync(() -> phoneRepository.save(phone), executorService);
         return Mono.fromFuture(future);
     }
 
-    public Mono<Address> add(Address address) {
-        var future = CompletableFuture
-            .supplyAsync(() -> addressRepository.save(address), executorService);
-        return Mono.fromFuture(future);
-    }
-
-    public Mono<Address> update(Long id, Address address) {
-        Address updated = address.toBuilder()
+    public Mono<Phone> update(Long id, Phone phone) {
+        Phone updated = phone.toBuilder()
             .id(id)
             .build();
         var future = CompletableFuture
-            .supplyAsync(() -> addressRepository.save(updated), executorService);
+            .supplyAsync(() -> phoneRepository.save(updated), executorService);
         return Mono.fromFuture(future);
     }
 
     public Mono<Void> remove(Long id) {
         CompletableFuture<Void> future = CompletableFuture
             .supplyAsync(() -> {
-                addressRepository.deleteById(id);
+                phoneRepository.deleteById(id);
                 return null;
             }, executorService);
         return Mono.fromFuture(future);
@@ -72,7 +62,7 @@ public class AddressService {
     public Mono<Void> removeByClientId(Long clientId) {
         CompletableFuture<Void> future = CompletableFuture
             .supplyAsync(() -> {
-                addressRepository.deleteAllByClientId(clientId);
+                phoneRepository.deleteByClientId(clientId);
                 return null;
             }, executorService);
         return Mono.fromFuture(future);
