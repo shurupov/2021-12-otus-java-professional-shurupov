@@ -7,21 +7,22 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.shurupov.webflux.source.domain.Address;
 import ru.otus.shurupov.webflux.source.repository.AddressRepository;
+import ru.otus.shurupov.webflux.source.service.AddressService;
 
 @RestController
 @RequiredArgsConstructor
 public class AddressController {
 
-    private final AddressRepository addressRepository;
+    private final AddressService addressService;
 
     @GetMapping(value = "/api/addresses", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public Flux<Address> getAll() {
-        return Flux.fromIterable(addressRepository.findAll());
+        return addressService.getAll();
     }
 
     @GetMapping(value = "/api/addresses/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public Mono<Address> get(@PathVariable Long id) {
-        return Mono.fromCallable(() -> addressRepository.findById(id).orElseThrow());
+        return addressService.get(id);
     }
 
     @PostMapping(value = "/api/addresses", produces = MediaType.APPLICATION_NDJSON_VALUE)
