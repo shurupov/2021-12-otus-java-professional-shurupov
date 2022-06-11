@@ -5,22 +5,20 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.shurupov.webflux.service.domain.Phone;
 
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 
 @Service
 @Slf4j
 public class PhoneService {
     private final WebClient webClient;
-    private final ExecutorService executorService;
 
-    public PhoneService(WebClient.Builder builder, ExecutorService executorService) {
+    public PhoneService(WebClient.Builder builder) {
         webClient = builder
             .baseUrl("http://localhost:8181")
             .build();
-        this.executorService = executorService;
     }
 
     public Flux<Phone> getAll() {
@@ -41,5 +39,16 @@ public class PhoneService {
             .retrieve()
             .bodyToFlux(Phone.class)
             .doOnNext(phone -> log.info("Received phone {}", phone));
+    }
+
+    public Mono<Phone> add(Phone phone) {
+        log.info("Requested phones creation");
+        return webClient.post()
+            .uri("/api/phones")
+            .bodyValue(phone)
+            .accept(MediaType.APPLICATION_NDJSON)
+            .retrieve()
+            .bodyToMono(Phone.class)
+            .doOnNext(created -> log.info("Received created phone {}", created));
     }
 }

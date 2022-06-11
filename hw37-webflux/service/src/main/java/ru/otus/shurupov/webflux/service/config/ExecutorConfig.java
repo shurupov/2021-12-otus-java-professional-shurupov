@@ -23,11 +23,6 @@ public class ExecutorConfig {
     public static final int THREAD_POOL_SIZE = 5;
 
     @Bean
-    public ExecutorService executorService() {
-        return Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-    }
-
-    @Bean
     public ReactorResourceFactory reactorResourceFactory() {
         var eventLoopGroup = new NioEventLoopGroup(THREAD_POOL_SIZE,
             new ThreadFactory() {
