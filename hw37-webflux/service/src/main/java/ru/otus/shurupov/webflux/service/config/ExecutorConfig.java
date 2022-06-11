@@ -28,25 +28,6 @@ public class ExecutorConfig {
     }
 
     @Bean
-    public ReactiveWebServerFactory reactiveWebServerFactory() {
-        var eventLoopGroup = new NioEventLoopGroup(THREAD_POOL_SIZE,
-            new ThreadFactory() {
-                private final AtomicLong threadIdGenerator = new AtomicLong(0);
-                @Override
-                public Thread newThread(@NonNull Runnable task) {
-                    var thread = new Thread(task);
-                    thread.setName("server-thread-" + threadIdGenerator.incrementAndGet());
-                    return thread;
-                }
-            });
-
-        var factory = new NettyReactiveWebServerFactory();
-        factory.addServerCustomizers(builder -> builder.runOn(eventLoopGroup));
-
-        return factory;
-    }
-
-    @Bean
     public ReactorResourceFactory reactorResourceFactory() {
         var eventLoopGroup = new NioEventLoopGroup(THREAD_POOL_SIZE,
             new ThreadFactory() {

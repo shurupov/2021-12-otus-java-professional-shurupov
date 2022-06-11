@@ -1,15 +1,19 @@
 package ru.otus.shurupov.webflux.service.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
 
-    private final Long id;
+    private Long id;
 
-    private final Long clientId;
+    private Long clientId;
 
-    private final String street;
+    private String street;
 }

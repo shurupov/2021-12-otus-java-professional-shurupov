@@ -2,13 +2,13 @@ package ru.otus.shurupov.webflux.service.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import ru.otus.shurupov.webflux.service.domain.Client;
 import ru.otus.shurupov.webflux.service.service.ClientService;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ClientController {
 

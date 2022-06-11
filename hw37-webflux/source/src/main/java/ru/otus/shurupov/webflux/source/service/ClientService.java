@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 import ru.otus.shurupov.webflux.source.domain.Client;
 import ru.otus.shurupov.webflux.source.repository.ClientRepository;
 
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
@@ -19,19 +20,23 @@ public class ClientService {
     public Flux<Client> getAll() {
         var future = CompletableFuture
             .supplyAsync(clientRepository::findAll, executorService);
-        return Mono.fromFuture(future).flatMapMany(Flux::fromIterable);
+        return Mono.fromFuture(future)
+            .flatMapMany(Flux::fromIterable)
+            .delayElements(Duration.ofSeconds(2));
     }
 
     public Mono<Client> get(Long id) {
         var future = CompletableFuture
             .supplyAsync(() -> clientRepository.findById(id).orElseThrow(), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(2));
     }
 
     public Mono<Client> add(Client client) {
         var future = CompletableFuture
             .supplyAsync(() -> clientRepository.save(client), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(2));
     }
 
     public Mono<Client> update(Long id, Client client) {
@@ -40,7 +45,8 @@ public class ClientService {
             .build();
         var future = CompletableFuture
             .supplyAsync(() -> clientRepository.save(updated), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(2));
     }
 
     public Mono<Void> remove(Long id) {
@@ -49,6 +55,7 @@ public class ClientService {
                 clientRepository.deleteById(id);
                 return null;
             }, executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(2));
     }
 }

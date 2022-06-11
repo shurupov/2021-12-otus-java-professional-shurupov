@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 import ru.otus.shurupov.webflux.source.domain.Address;
 import ru.otus.shurupov.webflux.source.repository.AddressRepository;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -30,25 +31,30 @@ public class AddressService {
                 .supplyAsync(addressRepository::findAll, executorService);
         }
 
-        return Mono.fromFuture(future).flatMapMany(Flux::fromIterable);
+        return Mono.fromFuture(future)
+            .flatMapMany(Flux::fromIterable)
+            .delayElements(Duration.ofSeconds(1));
     }
 
     public Mono<Address> get(Long id) {
         var future = CompletableFuture
             .supplyAsync(() -> addressRepository.findById(id).orElseThrow(), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Address> getByClientId(Long clientId) {
         var future = CompletableFuture
             .supplyAsync(() -> addressRepository.findTopByClientId(clientId).orElse(null), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Address> add(Address address) {
         var future = CompletableFuture
             .supplyAsync(() -> addressRepository.save(address), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Address> update(Long id, Address address) {
@@ -57,7 +63,8 @@ public class AddressService {
             .build();
         var future = CompletableFuture
             .supplyAsync(() -> addressRepository.save(updated), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Void> remove(Long id) {
@@ -66,7 +73,8 @@ public class AddressService {
                 addressRepository.deleteById(id);
                 return null;
             }, executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Void> removeByClientId(Long clientId) {
@@ -75,6 +83,7 @@ public class AddressService {
                 addressRepository.deleteAllByClientId(clientId);
                 return null;
             }, executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 }

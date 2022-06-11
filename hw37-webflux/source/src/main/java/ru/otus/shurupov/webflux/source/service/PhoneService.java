@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 import ru.otus.shurupov.webflux.source.domain.Phone;
 import ru.otus.shurupov.webflux.source.repository.PhoneRepository;
 
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
@@ -26,19 +27,23 @@ public class PhoneService {
                 .supplyAsync(phoneRepository::findAll, executorService);
         }
 
-        return Mono.fromFuture(future).flatMapMany(Flux::fromIterable);
+        return Mono.fromFuture(future)
+            .flatMapMany(Flux::fromIterable)
+            .delayElements(Duration.ofSeconds(1));
     }
 
     public Mono<Phone> get(Long id) {
         var future = CompletableFuture
             .supplyAsync(() -> phoneRepository.findById(id).orElseThrow(), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Phone> add(Phone phone) {
         var future = CompletableFuture
             .supplyAsync(() -> phoneRepository.save(phone), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Phone> update(Long id, Phone phone) {
@@ -47,7 +52,8 @@ public class PhoneService {
             .build();
         var future = CompletableFuture
             .supplyAsync(() -> phoneRepository.save(updated), executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Void> remove(Long id) {
@@ -56,7 +62,8 @@ public class PhoneService {
                 phoneRepository.deleteById(id);
                 return null;
             }, executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 
     public Mono<Void> removeByClientId(Long clientId) {
@@ -65,6 +72,7 @@ public class PhoneService {
                 phoneRepository.deleteByClientId(clientId);
                 return null;
             }, executorService);
-        return Mono.fromFuture(future);
+        return Mono.fromFuture(future)
+            .delayElement(Duration.ofSeconds(1));
     }
 }
