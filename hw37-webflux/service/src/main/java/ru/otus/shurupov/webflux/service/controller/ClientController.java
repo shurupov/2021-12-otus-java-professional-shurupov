@@ -20,13 +20,18 @@ public class ClientController {
         return clientService.getAll();
     }
 
+    @PostMapping(value = "/api/clients", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Mono<ClientDTO> get(@RequestBody ClientDTO clientDTO) {
+        return clientService.add(clientDTO);
+    }
+
     @GetMapping(value = "/api/clients/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public Mono<ClientDTO> get(@PathVariable Long id) {
         return clientService.get(id);
     }
 
-    @PostMapping(value = "/api/clients", produces = MediaType.APPLICATION_NDJSON_VALUE)
-    public Mono<ClientDTO> get(@RequestBody ClientDTO clientDTO) {
-        return clientService.add(clientDTO);
+    @DeleteMapping(value = "/api/clients/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Mono<Void> remove(@PathVariable Long id) {
+        return clientService.remove(id);
     }
 }

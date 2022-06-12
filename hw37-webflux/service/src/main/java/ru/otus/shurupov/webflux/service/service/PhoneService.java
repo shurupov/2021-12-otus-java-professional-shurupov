@@ -51,4 +51,13 @@ public class PhoneService {
             .bodyToMono(Phone.class)
             .doOnNext(created -> log.info("Received created phone {}", created));
     }
+
+    public Mono<Void> removeByClientId(Long clientId) {
+        return webClient.delete()
+            .uri("/api/phones?clientId={clientId}", Map.of("clientId", clientId))
+            .accept(MediaType.APPLICATION_NDJSON)
+            .retrieve()
+            .toBodilessEntity()
+            .then();
+    }
 }

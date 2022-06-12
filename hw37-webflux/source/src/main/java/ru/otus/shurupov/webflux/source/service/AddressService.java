@@ -8,7 +8,6 @@ import ru.otus.shurupov.webflux.source.domain.Address;
 import ru.otus.shurupov.webflux.source.repository.AddressRepository;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
@@ -80,7 +79,7 @@ public class AddressService {
     public Mono<Void> removeByClientId(Long clientId) {
         CompletableFuture<Void> future = CompletableFuture
             .supplyAsync(() -> {
-                addressRepository.deleteAllByClientId(clientId);
+                addressRepository.deleteByClientId(clientId);
                 return null;
             }, executorService);
         return Mono.fromFuture(future)

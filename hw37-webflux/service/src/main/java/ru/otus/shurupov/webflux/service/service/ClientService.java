@@ -14,6 +14,7 @@ import ru.otus.shurupov.webflux.service.domain.Phone;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -133,6 +134,20 @@ public class ClientService {
                 )
                 .build()
         );
+    }
+
+    public Mono<Void> justRemoveClient(Long id) {
+        return webClient.delete()
+            .uri("/api/clients/{id}", Map.of("id", id))
+            .accept(MediaType.APPLICATION_NDJSON)
+            .retrieve()
+            .toBodilessEntity()
+            .then();
+    }
+    public Mono<Void> remove(Long id) {
+        return phoneService.removeByClientId(id)
+            .then(addressService.removeByClientId(id))
+            .then(justRemoveClient(id));
     }
 
     private Client enrichWithPhones(Client client, CompletableFuture<List<Phone>> phones) {

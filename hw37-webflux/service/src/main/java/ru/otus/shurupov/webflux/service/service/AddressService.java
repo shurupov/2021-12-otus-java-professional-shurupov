@@ -53,4 +53,13 @@ public class AddressService {
             .bodyToMono(Address.class)
             .doOnNext(created -> log.info("Received created address {}", created));
     }
+
+    public Mono<Void> removeByClientId(Long clientId) {
+        return webClient.delete()
+            .uri("/api/addresses?clientId={clientId}", Map.of("clientId", clientId))
+            .accept(MediaType.APPLICATION_NDJSON)
+            .retrieve()
+            .toBodilessEntity()
+            .then();
+    }
 }
