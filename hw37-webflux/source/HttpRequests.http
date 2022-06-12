@@ -11,8 +11,16 @@ Content-Type: application/json
 Cache-Control: no-cache
 
 ###
-DELETE http://localhost:8080/api/clients/1
+DELETE http://localhost:8080/api/clients/3
 Accept: */*
 Content-Type: application/json
 Cache-Control: no-cache
+
+###
+PUT http://localhost:8080/api/clients/3
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+{"id":3,"name":"Sidorov","address":"Some street","phones":["11111", "22222"]}
 

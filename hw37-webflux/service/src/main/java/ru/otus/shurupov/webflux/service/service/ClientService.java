@@ -1,6 +1,5 @@
 package ru.otus.shurupov.webflux.service.service;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Service
@@ -192,5 +189,64 @@ public class ClientService {
                 : List.of()
             )
             .build();
+    }
+
+    public Mono<ClientDTO> update(Long id, ClientDTO clientDTO) {
+        log.info("Requested client update id: {}, clientDTO {}", id, clientDTO);
+        var updatedClientFuture = webClient.put()
+            .uri("/api/clients/{id}", Map.of("id", id))
+            .bodyValue(
+                Client.builder()
+                    .id(clientDTO.getId())
+                    .name(clientDTO.getName())
+                    .build()
+            )
+            .accept(MediaType.APPLICATION_NDJSON)
+            .retrieve()
+            .bodyToMono(Client.class)
+            .toFuture();
+
+        log.info("Requested removing and creation addresses clientId: {}, clientDTO {}", id, clientDTO);
+        var updatedAddresses = addressService.removeByClientId(id)
+            .then(addressService.add(
+                Address.builder()
+                    .clientId(id)
+                    .street(clientDTO.getAddress())
+                    .build()
+            )).toFuture();
+
+        log.info("Requested removing phones clientId: {}, clientDTO {}", id, clientDTO);
+        phoneService.removeByClientId(id)
+            .toFuture()
+            .join();
+
+        log.info("Requested creation phones clientId: {}, clientDTO {}", id, clientDTO);
+        List<Mono<Phone>> createdPhones = clientDTO.getPhones().stream()
+            .map(number ->
+                Phone.builder()
+                    .clientId(id)
+                    .number(number)
+                    .build()
+            ).map(phoneService::add)
+            .toList();
+
+        var updatedPhones = Flux.concat(createdPhones)
+            .collectList()
+            .toFuture();
+
+        ClientDTO updated = ClientDTO.builder()
+            .id(id)
+            .name(updatedClientFuture.join().getName())
+            .address(updatedAddresses.join().getStreet())
+            .phones(
+                updatedPhones.join().stream()
+                    .map(Phone::getNumber)
+                    .toList()
+            )
+            .build();
+
+        log.info("Client id updated id: {}, clientDTO {}", id, updated);
+
+        return Mono.just(updated);
     }
 }
