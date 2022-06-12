@@ -56,13 +56,15 @@ public class ClientService {
     }
 
     public Mono<ClientDTO> get(Long id) {
-
+        log.info("Requested phones by clientId {}", id);
         var phones = phoneService.getFilteredByClientId(id)
             .collect( () -> (List<Phone>) new ArrayList<Phone>(), List::add)
             .toFuture();
 
+        log.info("Requested phones by clientId {}", id);
         var address = addressService.getFilteredByClientId(id).toFuture();
 
+        log.info("Requested client id {}", id);
         return webClient.get()
             .uri("/api/clients/{id}", id)
             .accept(MediaType.APPLICATION_NDJSON)

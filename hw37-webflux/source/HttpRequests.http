@@ -24,3 +24,11 @@ Cache-Control: no-cache
 
 {"id":3,"name":"Sidorov","address":"Some street","phones":["11111", "22222"]}
 
+###
+POST http://localhost:8080/api/clients
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+{"id":3,"name":"Gagarin2","address":"fdfsdfs prospect","phones":["77", "2323232"]}
+
