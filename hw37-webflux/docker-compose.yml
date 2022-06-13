@@ -1,0 +1,11 @@
+version: "3"
+services:
+  postgresdb:
+    container_name: flux-hw-postgres
+    image: library/postgres:13.2
+    environment:
+      POSTGRES_USER: usr
+      POSTGRES_PASSWORD: pwd
+      POSTGRES_DB: flux
+    ports:
+      - "5432:5432"
