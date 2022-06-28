@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Random;
 
-@RestController("/api")
+@RestController
 public class SimpleController {
 
     private static final Random random = new Random();
 
-    @GetMapping("/try")
+    @GetMapping("/api/try")
     public String getTry() {
         return "success " + random.nextInt();
     }

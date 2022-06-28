@@ -21,6 +21,9 @@
         <maven.compiler.target>11</maven.compiler.target>
         <minimal.maven.version>3.6.3</minimal.maven.version>
         <spring.boot.mainclass>ru.shurupov.homeowners.core.HomeOwnersApp</spring.boot.mainclass>
+
+        <gitlab.username>********</gitlab.username> <!--TODO put credentials here without committing-->
+        <gitlab.password>********</gitlab.password>
     </properties>
 
     <dependencies>
@@ -81,29 +84,24 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.2.2</version>
-                <configuration>
-                    <imageName>homeowners</imageName>
-                    <dockerDirectory>.</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </resource>
-                    </resources>
-                </configuration>
-            </plugin>-->
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
+                    <container>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
+                    <from>
+                        <image>openjdk:11-jre-slim</image>
+                    </from>
                     <to>
-                        <image>registry.hub.docker.com/baeldungjib/spring-jib-app</image>
+                        <tags>${project.version}</tags>
+                        <image>registry.gitlab.com/shurupov/homeowners/core</image>
+                        <auth>
+                            <username>${gitlab.username}</username>
+                            <password>${gitlab.password}</password>
+                        </auth>
                     </to>
                 </configuration>
             </plugin>

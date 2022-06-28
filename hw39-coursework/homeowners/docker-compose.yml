@@ -1,0 +1,8 @@
+version: "3"
+services:
+
+  backend:
+    container_name: homeowners-core
+    image: registry.gitlab.com/shurupov/homeowners/core:1.0
+    ports:
+      - 8080:8080
