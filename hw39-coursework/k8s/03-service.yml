@@ -10,3 +10,16 @@ spec:
   selector:
     app: homeowners-core
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: ui
+  type: ClusterIP
