@@ -42,4 +42,4 @@ logs/
 target
 kubernetes-cluster-*
 .dockerconfigjson
-01-registry-credentials.yml
+01-secret.yml

@@ -23,6 +23,14 @@ spec:
           name: homeowners-core
           ports:
             - containerPort: 8080
+          env:
+            - name: SOME_VARIABLE
+              value: some value from k8s 02-deployment.yml
+            - name: SOME_SECRET_VARIABLE
+              valueFrom:
+                secretKeyRef:
+                  name: dbsecret
+                  key: secretword
       imagePullSecrets:
         - name: registry-credentials
 

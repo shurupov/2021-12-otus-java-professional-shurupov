@@ -1,0 +1,2 @@
+some.variable: default value from spring application.yml
+some.secret.variable: default value from spring application.yml
