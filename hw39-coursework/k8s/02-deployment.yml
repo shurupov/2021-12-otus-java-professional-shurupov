@@ -2,12 +2,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rest-hello-deployment
+  name: homeowners-core
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rest-hello
+      app: homeowners-core
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -16,13 +16,12 @@ spec:
   template:
     metadata:
       labels:
-        app: rest-hello
+        app: homeowners-core
     spec:
       containers:
-#        - image: registry.gitlab.com/shurupov/homeowners/core
-        - image: nginx:latest
-          name: rest-hello
+        - image: registry.gitlab.com/shurupov/homeowners/core
+          name: homeowners-core
           ports:
-            - containerPort: 80
+            - containerPort: 8080
       imagePullSecrets:
-        - name: regcred 
+        - name: registry-credentials

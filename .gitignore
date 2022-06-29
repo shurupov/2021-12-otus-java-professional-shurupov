@@ -39,5 +39,7 @@ out
 
 logs/
 
-kubernetes-cluster-*
 target
+kubernetes-cluster-*
+.dockerconfigjson
+01-registry-credentials.yml
