@@ -22,8 +22,10 @@
         <minimal.maven.version>3.6.3</minimal.maven.version>
         <spring.boot.mainclass>ru.shurupov.homeowners.core.HomeOwnersApp</spring.boot.mainclass>
 
-        <gitlab.username>********</gitlab.username> <!--TODO put credentials here without committing-->
-        <gitlab.password>********</gitlab.password>
+        <!--suppress UnresolvedMavenProperty -->
+        <gitlab.username>${env.GITLAB_USERNAME}</gitlab.username>
+        <!--suppress UnresolvedMavenProperty -->
+        <gitlab.password>${env.GITLAB_PASSWORD}</gitlab.password>
     </properties>
 
     <dependencies>
