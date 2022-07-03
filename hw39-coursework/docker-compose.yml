@@ -1,0 +1,34 @@
+version: "3"
+services:
+  postgresdb:
+    container_name: homeowners-postgres
+    image: library/postgres:14.4
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: homeowners
+      POSTGRES_PASSWORD: homeowners
+      POSTGRES_DB: homeowners
+    networks:
+      - backend
+
+  backend:
+    container_name: homeowners-core
+    image: registry.gitlab.com/shurupov/homeowners/core:1.0
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgresdb
+    networks:
+      - backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresdb:5432/homeowners
+      SPRING_DATASOURCE_USERNAME: homeowners
+      SPRING_DATASOURCE_PASSWORD: homeowners
+      LIQUIBASE_URL: jdbc:postgresql://postgresdb:5432/homeowners
+      LIQUIBASE_USER: homeowners
+      LIQUIBASE_PASSWORD: homeowners
+
+networks:
+  frontend:
+  backend:

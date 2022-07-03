@@ -1,2 +1,24 @@
 some.variable: default value from spring application.yml
 some.secret.variable: default value from spring application.yml
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/homeowners
+    username: homeowners
+    password: homeowners
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: never
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+liquibase:
+  enabled: true
+  driver-class-name: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/homeowners
+  user: homeowners
+  password: homeowners

@@ -2,7 +2,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: homeowners-postgres
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homeowners-postgres
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: homeowners-postgres
+    spec:
+      containers:
+        - image: library/postgres:14.4
+          name: homeowners-postgres
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: homeowners
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hosecrets
+                  key: homeowners_db_password
+            - name: POSTGRES_DB
+              value: homeowners
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: homeowners-core
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -29,8 +67,26 @@ spec:
             - name: SOME_SECRET_VARIABLE
               valueFrom:
                 secretKeyRef:
-                  name: dbsecret
+                  name: hosecrets
                   key: secretword
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://homeowners-postgres.default.svc.cluster.local:5432/homeowners
+            - name: SPRING_DATASOURCE_USERNAME
+              value: homeowners
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hosecrets
+                  key: homeowners_db_password
+            - name: LIQUIBASE_URL
+              value: jdbc:postgresql://homeowners-postgres.default.svc.cluster.local:5432/homeowners
+            - name: LIQUIBASE_USER
+              value: homeowners
+            - name: LIQUIBASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hosecrets
+                  key: homeowners_db_password
       imagePullSecrets:
         - name: registry-credentials
 
@@ -39,6 +95,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ui
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -59,5 +116,3 @@ spec:
           name: ui
           ports:
             - containerPort: 80
-#      imagePullSecrets:
-#        - name: regcred
