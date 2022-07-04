@@ -1,1 +1,0 @@
-insert into building (address) values ('Проспект Ленина, 3');

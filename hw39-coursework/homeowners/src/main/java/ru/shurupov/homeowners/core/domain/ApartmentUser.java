@@ -8,16 +8,20 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "building")
+@Table(name = "apartment_user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Building {
+public class ApartmentUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String address;
+    private String fullName;
+    private String shortName;
+    private String phoneNumber;
+    private String telegram;
+    private String username;
 }

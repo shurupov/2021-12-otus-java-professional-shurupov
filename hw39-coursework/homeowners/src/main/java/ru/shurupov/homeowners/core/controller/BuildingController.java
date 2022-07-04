@@ -1,8 +1,8 @@
 package ru.shurupov.homeowners.core.controller;
 
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.shurupov.homeowners.core.domain.Building;
 import ru.shurupov.homeowners.core.repository.BuildingRepository;
 
@@ -17,6 +17,21 @@ public class BuildingController {
     @GetMapping("/api/buildings")
     public List<Building> getAll() {
         return buildingRepository.findAll();
+    }
+
+    @GetMapping("/api/buildings/{id}")
+    public Building get(@PathVariable Integer id) throws NotFoundException {
+        return buildingRepository.findById(id).orElseThrow(() -> new NotFoundException("Building not found"));
+    }
+
+    @PostMapping("/api/buildings")
+    public Building post(@RequestBody Building building) {
+        return buildingRepository.save(building);
+    }
+
+    @PutMapping("/api/buildings/{id}")
+    public Building post(@PathVariable Integer id, @RequestBody Building building) {
+        return buildingRepository.save(building.toBuilder().id(id).build());
     }
 
 }
