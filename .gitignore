@@ -40,6 +40,8 @@ out
 logs/
 
 target
-kubernetes-cluster-*
+*kubeconfig.yaml
 .dockerconfigjson
 01-secret.yml
+
+node_modules/

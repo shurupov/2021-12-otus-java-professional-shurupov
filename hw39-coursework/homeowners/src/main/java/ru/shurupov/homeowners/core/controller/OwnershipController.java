@@ -1,10 +1,10 @@
 package ru.shurupov.homeowners.core.controller;
 
 
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.shurupov.homeowners.core.domain.Ownership;
+import ru.shurupov.homeowners.core.exception.NotFoundException;
 import ru.shurupov.homeowners.core.repository.OwnershipRepository;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class OwnershipController {
     }
 
     @GetMapping("/api/ownerships/{id}")
-    public Ownership get(@PathVariable Integer id) throws NotFoundException {
+    public Ownership get(@PathVariable Integer id) {
         return ownershipRepository.findById(id).orElseThrow(() -> new NotFoundException("Ownership not found"));
     }
 

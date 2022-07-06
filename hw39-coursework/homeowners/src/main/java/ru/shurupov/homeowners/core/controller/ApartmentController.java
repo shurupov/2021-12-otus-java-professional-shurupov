@@ -1,9 +1,9 @@
 package ru.shurupov.homeowners.core.controller;
 
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.shurupov.homeowners.core.domain.Apartment;
+import ru.shurupov.homeowners.core.exception.NotFoundException;
 import ru.shurupov.homeowners.core.repository.ApartmentRepository;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class ApartmentController {
     }
 
     @GetMapping("/api/apartments/{id}")
-    public Apartment get(@PathVariable Integer id) throws NotFoundException {
+    public Apartment get(@PathVariable Integer id) {
         return apartmentRepository.findById(id).orElseThrow(() -> new NotFoundException("Apartment not found"));
     }
 
