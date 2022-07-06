@@ -2,43 +2,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: homeowners-postgres
-  namespace: default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: homeowners-postgres
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
-  template:
-    metadata:
-      labels:
-        app: homeowners-postgres
-    spec:
-      containers:
-        - image: library/postgres:14.4
-          name: homeowners-postgres
-          ports:
-            - containerPort: 5432
-          env:
-            - name: POSTGRES_USER
-              value: homeowners
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: hosecrets
-                  key: homeowners_db_password
-            - name: POSTGRES_DB
-              value: homeowners
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: homeowners-core
   namespace: default
 spec:
@@ -63,7 +26,7 @@ spec:
             - containerPort: 8080
           env:
             - name: SOME_VARIABLE
-              value: some value from k8s 02-deployment.yml
+              value: some value from k8s yml
             - name: SOME_SECRET_VARIABLE
               valueFrom:
                 secretKeyRef:
@@ -90,29 +53,18 @@ spec:
       imagePullSecrets:
         - name: registry-credentials
 
+
+
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: ui
+  name: homeowners-core
   namespace: default
 spec:
-  replicas: 1
+  ports:
+    - port: 80
+      targetPort: 8080
   selector:
-    matchLabels:
-      app: ui
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
-  template:
-    metadata:
-      labels:
-        app: ui
-    spec:
-      containers:
-        - image: nginx:latest
-          name: ui
-          ports:
-            - containerPort: 80
+    app: homeowners-core
+  type: ClusterIP
