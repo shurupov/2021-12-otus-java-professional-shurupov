@@ -20,7 +20,7 @@ spec:
         app: ui
     spec:
       containers:
-        - image: registry.gitlab.com/shurupov/homeowners/ui:1.0
+        - image: registry.gitlab.com/shurupov/homeowners/ui:1.1
           name: ui
           ports:
             - containerPort: 80

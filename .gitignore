@@ -45,3 +45,5 @@ target
 01-secret.yml
 
 node_modules/
+
+dockerpassword
