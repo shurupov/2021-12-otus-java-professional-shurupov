@@ -6,3 +6,5 @@ docker-login:
 docker-push:
 	docker push registry.gitlab.com/shurupov/homeowners/ui:1.1
 
+docker-login-build-push: docker-login docker-build docker-push
+

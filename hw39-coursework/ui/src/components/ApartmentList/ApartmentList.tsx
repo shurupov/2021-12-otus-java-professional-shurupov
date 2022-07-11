@@ -39,7 +39,7 @@ const columns = [
         title: 'Площадь',
         dataIndex: 'square',
         key: 'square',
-        render: (value: number) => value + " м<sub>2</sub>"
+        render: (value: number) => <>{value} м<sup>2</sup></>
     },
 ];
 

@@ -40,4 +40,45 @@ module.exports = {
             template: path.join(__dirname, "src", "index.html"),
         }),
     ],
+    // devtool: "inline-source-map",
+
+    devServer: {
+        contentBase: path.join(__dirname, "build"),
+        historyApiFallback: true,
+        port: 4000,
+        open: true,
+        hot: true,
+        before: (app) => {
+            app.get('/core/api/apartments', (req, res) => res.send([
+                {
+                    id: 1,
+                    apartmentType: { id: 1, name: "Квартира"},
+                    number: 1,
+                    floor: 1,
+                    square: 50.5
+                },
+                {
+                    id: 2,
+                    apartmentType: { id: 1, name: "Квартира"},
+                    number: 2,
+                    floor: 1,
+                    square: 70
+                },
+                {
+                    id: 3,
+                    apartmentType: { id: 1, name: "Квартира"},
+                    number: 3,
+                    floor: 2,
+                    square: 50.5
+                },
+                {
+                    id: 4,
+                    apartmentType: { id: 1, name: "Квартира"},
+                    number: 4,
+                    floor: 2,
+                    square: 70
+                },
+            ]));
+        }
+    },
 };
