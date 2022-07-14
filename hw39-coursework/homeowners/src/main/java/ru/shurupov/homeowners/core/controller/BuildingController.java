@@ -7,7 +7,6 @@ import ru.shurupov.homeowners.core.exception.NotFoundException;
 import ru.shurupov.homeowners.core.repository.BuildingRepository;
 
 import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 public class BuildingController {

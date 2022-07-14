@@ -1,5 +1,6 @@
 package ru.shurupov.homeowners.core.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +25,6 @@ public class ApartmentUser {
     private String phoneNumber;
     private String telegram;
     private String username;
+    @JsonIgnore
+    private String password;
 }

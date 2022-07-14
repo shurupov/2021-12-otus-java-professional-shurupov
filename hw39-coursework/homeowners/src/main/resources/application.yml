@@ -22,3 +22,7 @@ liquibase:
   url: jdbc:postgresql://localhost:5432/homeowners
   user: homeowners
   password: homeowners
+
+bezkoder.app:
+  jwtSecret: bezKoderSecretKey
+  jwtExpirationMs: 86400000
