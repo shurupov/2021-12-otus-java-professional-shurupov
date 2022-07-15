@@ -24,7 +24,7 @@ create table public.apartment_user (
     phone_number varchar(20),
     telegram varchar(100),
     username varchar(50),
-    password varchar(50),
+    password varchar(150),
     salt varchar(10)
 );
 

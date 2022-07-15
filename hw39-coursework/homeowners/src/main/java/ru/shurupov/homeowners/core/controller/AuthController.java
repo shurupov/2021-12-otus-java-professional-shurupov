@@ -6,21 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.shurupov.homeowners.core.domain.ApartmentUser;
+import ru.shurupov.homeowners.core.domain.Role;
 import ru.shurupov.homeowners.core.domain.dto.JwtResponse;
 import ru.shurupov.homeowners.core.domain.dto.LoginRequest;
 import ru.shurupov.homeowners.core.domain.dto.MessageResponse;
 import ru.shurupov.homeowners.core.domain.dto.SignupRequest;
 import ru.shurupov.homeowners.core.repository.ApartmentUserRepository;
 import ru.shurupov.homeowners.core.service.JwtService;
-import ru.shurupov.homeowners.core.service.UserDetailsImpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -43,12 +42,10 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtService.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList());
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<String> roles = List.of(Role.ROLE_USER.name());
         return ResponseEntity.ok(new JwtResponse(jwt,
-            userDetails.getId(),
+            0L,
             userDetails.getUsername(),
             roles));
     }
@@ -63,6 +60,7 @@ public class AuthController {
 
         // Create new user's account
         ApartmentUser user = ApartmentUser.builder()
+            .fullName(signUpRequest.getFullName())
             .username(signUpRequest.getUsername())
             .password(encoder.encode(signUpRequest.getPassword()))
             .build();

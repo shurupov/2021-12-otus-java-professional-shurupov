@@ -1,6 +1,8 @@
 package ru.shurupov.homeowners.core.security;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
 
+    private static final Logger logger  = LoggerFactory.getLogger(AuthTokenFilter.class);
+
     private final JwtService jwtService;
 
     private final UserDetailsService userDetailsService;
@@ -28,10 +32,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
         try {
+            logger.info("filter enter");
             String jwt = parseJwt(request);
+            logger.info("jwt {}", jwt);
             if (jwt != null && jwtService.validateJwtToken(jwt)) {
                 String username = jwtService.getUserNameFromJwtToken(jwt);
+                logger.info("username {}", username);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                logger.info("userDetails {}", userDetails);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
