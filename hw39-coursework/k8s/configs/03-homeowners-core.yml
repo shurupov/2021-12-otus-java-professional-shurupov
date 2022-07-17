@@ -32,6 +32,11 @@ spec:
                 secretKeyRef:
                   name: hosecrets
                   key: secretword
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hosecrets
+                  key: jwt_secret
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://homeowners-postgres.default.svc.cluster.local:5432/homeowners
             - name: SPRING_DATASOURCE_USERNAME

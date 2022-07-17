@@ -16,9 +16,9 @@ import java.util.Date;
 public class JwtService {
     private static final Logger logger  = LoggerFactory.getLogger(JwtService.class);
 
-    @Value("${bezkoder.app.jwtSecret}")
+    @Value("${jwt.secret}")
     private final String jwtSecret;
-    @Value("${bezkoder.app.jwtExpirationMs}")
+    @Value("${jwt.expirationMs}")
     private final int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {

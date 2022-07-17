@@ -5,8 +5,9 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import { PreloadedState, Store } from "@reduxjs/toolkit";
 import {watchApartmentList} from "components/ApartmentList/saga";
 import {composeWithDevTools} from "redux-devtools-extension";
-// import {routerMiddleware} from "connected-react-router";
 import {watchLocationChange} from "components/routing/saga";
+import {routerMiddleware} from "connected-react-router";
+import {watchSignIn} from "components/SignInForm/saga";
 
 export const history = createBrowserHistory();
 
@@ -19,7 +20,7 @@ export default function configureStore(preloadedState: PreloadedState<any>) {
         compose(
             composeWithDevTools(
                 applyMiddleware(
-                    // routerMiddleware(history),
+                    routerMiddleware(history),
                     sagaMiddleware
                 )
             ),
@@ -33,3 +34,4 @@ export const store: Store = configureStore({});
 
 sagaMiddleware.run(watchApartmentList);
 sagaMiddleware.run(watchLocationChange);
+sagaMiddleware.run(watchSignIn);

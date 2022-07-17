@@ -11,6 +11,7 @@ module.exports = {
             components: path.resolve(__dirname, "src/components"),
             store: path.resolve(__dirname, "src/store"),
             api: path.resolve(__dirname, "src/api"),
+            utils: path.resolve(__dirname, "src/utils"),
         },
     },
     module: {
@@ -79,6 +80,15 @@ module.exports = {
                     square: 70
                 },
             ]));
+            app.post('/core/api/auth/signin', (req, res) => res.send({
+                "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTY1ODA3NzgxMSwiZXhwIjoxNjU4MTY0MjExfQ._qaEaUcX5BtGYd0xU0Jyp1Ln-suxWytO83NI8aoaLN7Ko7cSAKryy098hlsEs8CxwOR15QObZ7Gd9oMt3AJttQ",
+                "type": "Bearer",
+                "id": 0,
+                "username": "user1",
+                "roles": [
+                    "ROLE_USER"
+                ]
+            }));
         }
     },
 };

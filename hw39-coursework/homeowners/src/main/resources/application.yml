@@ -23,6 +23,6 @@ liquibase:
   user: homeowners
   password: homeowners
 
-bezkoder.app:
-  jwtSecret: bezKoderSecretKey
-  jwtExpirationMs: 86400000
+jwt:
+  secret: secret
+  expirationMs: 86400000

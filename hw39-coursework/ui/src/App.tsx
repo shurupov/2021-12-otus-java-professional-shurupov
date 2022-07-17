@@ -7,7 +7,9 @@ import {Provider} from "react-redux";
 import {history, store} from "store/store";
 import { ConnectedApartmentList } from 'components/ApartmentList/ConnectedApartmentList';
 import {ConnectedRouter} from "connected-react-router";
-import {Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import {SignIn} from "components/SignInForm/SignIn";
+import {ConnectedSignIn} from "components/SignInForm/ConnectedSignIn";
 
 const apartments: Array<Apartment> = [
     {
@@ -56,8 +58,14 @@ export const App = () => {
                         </Breadcrumb>
                         <div className="content">
                             <Switch>
-                                <Route path="/apartments">
+                                <Route path="/" exact>
+                                    <Redirect to="/apartments" />
+                                </Route>
+                                <Route path="/apartments" exact>
                                     <ConnectedApartmentList />
+                                </Route>
+                                <Route path="/signin" exact>
+                                    <ConnectedSignIn />
                                 </Route>
                             </Switch>
                         </div>
