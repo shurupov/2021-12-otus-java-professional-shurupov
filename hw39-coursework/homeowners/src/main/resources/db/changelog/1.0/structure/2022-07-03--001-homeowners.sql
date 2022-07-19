@@ -25,7 +25,9 @@ create table public.apartment_user (
     telegram varchar(100),
     username varchar(50),
     password varchar(150),
-    salt varchar(10)
+    salt varchar(10),
+    roles jsonb,
+    reg_hash varchar(50)
 );
 
 create table public.ownership_type (

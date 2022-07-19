@@ -12,33 +12,33 @@ services:
     networks:
       - backend
 
-  backend:
-    container_name: homeowners-core
-    image: registry.gitlab.com/shurupov/homeowners/core:latest
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgresdb
-    networks:
-      - backend
-      - frontend
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresdb:5432/homeowners
-      SPRING_DATASOURCE_USERNAME: homeowners
-      SPRING_DATASOURCE_PASSWORD: homeowners
-      LIQUIBASE_URL: jdbc:postgresql://postgresdb:5432/homeowners
-      LIQUIBASE_USER: homeowners
-      LIQUIBASE_PASSWORD: homeowners
-
-  frontend:
-    container_name: homeowners-ui
-    image: registry.gitlab.com/shurupov/homeowners/ui:1.1
-    ports:
-      - 80:80
-    depends_on:
-      - backend
-    networks:
-      - frontend
+#  backend:
+#    container_name: homeowners-core
+#    image: registry.gitlab.com/shurupov/homeowners/core
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - postgresdb
+#    networks:
+#      - backend
+#      - frontend
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresdb:5432/homeowners
+#      SPRING_DATASOURCE_USERNAME: homeowners
+#      SPRING_DATASOURCE_PASSWORD: homeowners
+#      LIQUIBASE_URL: jdbc:postgresql://postgresdb:5432/homeowners
+#      LIQUIBASE_USER: homeowners
+#      LIQUIBASE_PASSWORD: homeowners
+#
+#  frontend:
+#    container_name: homeowners-ui
+#    image: registry.gitlab.com/shurupov/homeowners/ui
+#    ports:
+#      - 80:80
+#    depends_on:
+#      - backend
+#    networks:
+#      - frontend
 
 networks:
   frontend:

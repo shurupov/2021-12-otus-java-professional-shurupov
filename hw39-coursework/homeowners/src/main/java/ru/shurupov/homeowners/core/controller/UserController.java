@@ -2,9 +2,11 @@ package ru.shurupov.homeowners.core.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.shurupov.homeowners.core.domain.ApartmentUser;
+import ru.shurupov.homeowners.core.domain.User;
+import ru.shurupov.homeowners.core.domain.dto.UserDto;
 import ru.shurupov.homeowners.core.exception.NotFoundException;
-import ru.shurupov.homeowners.core.repository.ApartmentUserRepository;
+import ru.shurupov.homeowners.core.repository.UserRepository;
+import ru.shurupov.homeowners.core.service.UserService;
 
 import java.util.List;
 
@@ -12,25 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final ApartmentUserRepository apartmentUserRepository;
+    private final UserService userService;
 
     @GetMapping("/api/users")
-    public List<ApartmentUser> getAll() {
-        return apartmentUserRepository.findAll();
+    public List<UserDto> getAll() {
+        return userService.findAll();
     }
 
     @GetMapping("/api/users/{id}")
-    public ApartmentUser get(@PathVariable Integer id) {
-        return apartmentUserRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-    }
-
-    @PostMapping("/api/users")
-    public ApartmentUser post(@RequestBody ApartmentUser apartmentUser) {
-        return apartmentUserRepository.save(apartmentUser);
-    }
-
-    @PutMapping("/api/users/{id}")
-    public ApartmentUser post(@PathVariable Integer id, @RequestBody ApartmentUser apartmentUser) {
-        return apartmentUserRepository.save(apartmentUser.toBuilder().id(id).build());
+    public UserDto get(@PathVariable Integer id) {
+        return userService
+            .findById(id)
+            .orElseThrow(() -> new NotFoundException("User not found"));
     }
 }

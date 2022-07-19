@@ -23,9 +23,9 @@ public class Ownership {
     @JoinColumn(name = "apartment_id")
     private Apartment apartment;
 
-    @ManyToOne(targetEntity = ApartmentUser.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private ApartmentUser apartmentUser;
+    private User user;
 
     @ManyToOne(targetEntity = OwnershipType.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "ownership_type_id")

@@ -14,7 +14,6 @@ export const signInAction = (signInRequest: SignInRequest) => {
 
 export function* workerSignIn(action:AnyAction): any {
     try {
-        console.log(action);
         const jwtResponse = yield call(loginFetch, action.payload);
         localStorage.setItem("jwttoken", jwtResponse.token);
         history.push("/");
