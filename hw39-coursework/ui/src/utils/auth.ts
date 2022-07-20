@@ -1,6 +1,6 @@
 import {call} from "redux-saga/effects";
-import {history} from "store/store";
 import {SignInRequest} from "components/SignInForm/SignIn";
+import { push } from "connected-react-router";
 
 export function* extendedFetch(url: string, method = "GET", body: any = undefined, headers = {}): any {
     const requestSettings: RequestInit = {
@@ -30,10 +30,10 @@ export function* loginFetch(authRequest: SignInRequest): any {
 export function* authenticatedFetch(url: string, method = "GET", body: any = undefined): any {
     if (!authenticated()) {
         console.log("not authenticated");
-        history.push("/signin");
+        push("/signin");
+        return;
     }
     const jwttoken = localStorage.getItem("jwttoken");
-    console.log(jwttoken);
     const authHeaders = {
         "Authorization": "Bearer " + jwttoken
     };
@@ -48,6 +48,6 @@ export const authenticated = (): boolean => {
 export const logout = (): void => {
     localStorage.removeItem("jwttoken");
     setTimeout(() => {
-        history.push("/signin");
+        push("/signin");
     }, 500);
 }

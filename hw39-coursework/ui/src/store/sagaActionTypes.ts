@@ -4,6 +4,7 @@ export const sagaActionTypes = {
 
     APARTMENTS: "saga/apartments",
 
-    AUTHENTICATION_LOGIN:      "saga/authentication/login",
-    AUTHENTICATION_LOGOUT:     "saga/authentication/logout",
+    AUTHENTICATION_SIGNIN:      "saga/authentication/signin",
+    AUTHENTICATION_SIGNUP:      "saga/authentication/signup",
+    AUTHENTICATION_LOGOUT:      "saga/authentication/logout",
 };

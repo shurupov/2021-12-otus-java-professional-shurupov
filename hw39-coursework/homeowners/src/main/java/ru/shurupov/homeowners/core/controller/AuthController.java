@@ -31,11 +31,8 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-
     private final UserRepository userRepository;
-
     private final PasswordEncoder encoder;
-
     private final JwtService jwtService;
 
     @PostMapping("/signin")

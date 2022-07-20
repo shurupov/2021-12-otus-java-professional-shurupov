@@ -6,7 +6,6 @@ import {signInAction} from "components/SignInForm/saga";
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         submit: (authRequest: SignInRequest) => {
-            console.log(authRequest);
             dispatch(signInAction(authRequest));
         }
     }
