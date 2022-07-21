@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "start": "webpack serve --env dev",
+    "build": "webpack --config webpack.prod.config.js",
+    "start": "webpack serve --env dev --config webpack.dev.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Evgeny Shurupov",

@@ -2,7 +2,6 @@ import {call, put, takeEvery} from "redux-saga/effects";
 import {sagaActionTypes} from "store/sagaActionTypes";
 import {apartmentsSlice} from "components/ApartmentList/slice";
 import {authenticated, authenticatedFetch} from "utils/auth";
-import {push} from "connected-react-router";
 
 export const apartmentListAction = () => {
     return {

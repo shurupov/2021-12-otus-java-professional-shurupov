@@ -1,6 +1,7 @@
-import {call} from "redux-saga/effects";
+import {call, put} from "redux-saga/effects";
 import {SignInRequest} from "components/SignInForm/SignIn";
 import { push } from "connected-react-router";
+import {store} from "store/store";
 
 export function* extendedFetch(url: string, method = "GET", body: any = undefined, headers = {}): any {
     const requestSettings: RequestInit = {
@@ -15,9 +16,8 @@ export function* extendedFetch(url: string, method = "GET", body: any = undefine
     const response: Response = yield call(fetch, url, requestSettings);
     if (!response.ok) {
         throw {
-            name: "BadResponse",
-            message: "Bad Response",
-            response: response,
+            message: "Request exception",
+            response,
         };
     }
     return yield call([response, 'json']);
@@ -30,7 +30,7 @@ export function* loginFetch(authRequest: SignInRequest): any {
 export function* authenticatedFetch(url: string, method = "GET", body: any = undefined): any {
     if (!authenticated()) {
         console.log("not authenticated");
-        push("/signin");
+        yield put(push("/signin"));
         return;
     }
     const jwttoken = localStorage.getItem("jwttoken");
@@ -38,7 +38,14 @@ export function* authenticatedFetch(url: string, method = "GET", body: any = und
         "Authorization": "Bearer " + jwttoken
     };
 
-    return yield call(extendedFetch, url, method, body, authHeaders);
+    try {
+        return yield call(extendedFetch, url, method, body, authHeaders);
+    } catch (e: any) {
+        if (e.response != undefined && e.response.status == 401) {
+            console.log("not authenticated");
+            yield put(push("/signin"));
+        }
+    }
 }
 
 export const authenticated = (): boolean => {
@@ -47,7 +54,8 @@ export const authenticated = (): boolean => {
 
 export const logout = (): void => {
     localStorage.removeItem("jwttoken");
-    setTimeout(() => {
-        push("/signin");
-    }, 500);
+    store.dispatch(push("/signin"));
+    /*setTimeout(() => {
+
+    }, 500);*/
 }

@@ -8,7 +8,7 @@ module.exports = {
         filename: "[name].[contenthash].js",
         publicPath: "/",
     },
-    mode: process.env.NODE_ENV || "development",
+    mode: "development",
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
         alias: {
@@ -92,6 +92,9 @@ module.exports = {
                 "roles": [
                     "ROLE_USER"
                 ]
+            }));
+            app.post('/core/api/auth/signup', (req, res) => res.send({
+                "message": "Успешно!"
             }));
         }
     },

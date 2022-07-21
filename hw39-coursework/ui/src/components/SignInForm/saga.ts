@@ -1,5 +1,5 @@
 import {sagaActionTypes} from "store/sagaActionTypes";
-import {call, takeEvery} from "redux-saga/effects";
+import {call, put, takeEvery} from "redux-saga/effects";
 import {loginFetch} from "utils/auth";
 import {AnyAction} from "redux";
 import {history} from "store/store";
@@ -17,7 +17,7 @@ export function* workerSignIn(action:AnyAction): any {
     try {
         const jwtResponse = yield call(loginFetch, action.payload);
         localStorage.setItem("jwttoken", jwtResponse.token);
-        push("/");
+        yield put(push("/"));
     } catch (e: any) {
         if (e.name == "BadResponse" && e.response.status == 401) {
             console.log("Ошибка аутентификации");

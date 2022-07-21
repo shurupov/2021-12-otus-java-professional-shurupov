@@ -1,4 +1,4 @@
-import {Button, Form, Input} from "antd";
+import {Button, Form, Input, Typography} from "antd";
 import React from "react";
 import { SignUpResult } from "./SignUpResult";
 
@@ -44,8 +44,10 @@ export const SignUp = (props: SignUpProps) => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
         >
+            <Typography.Title level={2} style={{ textAlign: "center" }}>Регистрация</Typography.Title>
+
             <Form.Item
-                label="Username"
+                label="Имя пользователя"
                 name="username"
                 rules={[{ required: true, message: 'Please input your username!' }]}
             >
@@ -53,7 +55,7 @@ export const SignUp = (props: SignUpProps) => {
             </Form.Item>
 
             <Form.Item
-                label="Password"
+                label="Пароль"
                 name="password"
                 rules={[{ required: true, message: 'Please input your password!' }]}
             >
@@ -62,7 +64,7 @@ export const SignUp = (props: SignUpProps) => {
 
             <Form.Item wrapperCol={{ offset: 9, span: 7 }}>
                 <Button type="primary" htmlType="submit">
-                    Submit
+                    Зарегистрироваться
                 </Button>
             </Form.Item>
         </Form>

@@ -5,7 +5,7 @@ WORKDIR $PROJECT_DIR
 
 ADD ./ $PROJECT_DIR/
 RUN npm install
-RUN npm run build
+RUN NODE_ENV=production npm run build
 
 FROM nginx:1.17.1-alpine
 ENV PROJECT_DIR=/opt/project

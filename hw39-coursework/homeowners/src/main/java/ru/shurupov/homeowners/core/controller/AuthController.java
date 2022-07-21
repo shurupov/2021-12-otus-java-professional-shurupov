@@ -65,7 +65,7 @@ public class AuthController {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                 .badRequest()
-                .body(new MessageResponse("Error: Username is already taken!"));
+                .body(new MessageResponse("Ошибка: Имя пользователя уже занято!"));
         }
 
         Optional<User> userOptional = userRepository.findByRegHash(signUpRequest.getHash());
@@ -73,7 +73,7 @@ public class AuthController {
         if (userOptional.isEmpty()) {
             return ResponseEntity
                 .badRequest()
-                .body(new MessageResponse("Error: Registration link is wrong"));
+                .body(new MessageResponse("Ошибка: Сыылка рагистрации не верная!"));
         }
 
         User user = userOptional.get().toBuilder()
@@ -85,7 +85,7 @@ public class AuthController {
 
 
         userRepository.save(user);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Вы успешно зарегистрировались!"));
     }
 
 }

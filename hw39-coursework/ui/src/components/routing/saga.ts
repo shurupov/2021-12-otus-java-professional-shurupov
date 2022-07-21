@@ -12,15 +12,16 @@ export function* workerLocationChange(): any {
 
     if (url == "/apartments") {
         yield put(apartmentListAction());
-    } else if (url.substring(0, 8) == "/signup/") {
+        return;
+    }
+    if (url.substring(0, 8) == "/signup/") {
         yield put(signUpSlice.actions.signUp({ hash: url.substring(8)}));
-    } /*else if (url == "/") {
-        if (authenticated()) {
-            push("/apartments")
-        } else {
-            push("/signin");
-        }
-    }*/
+        return;
+    }
+    if (url == "/") {
+        yield put(push("/apartments"));
+        return;
+    }
 }
 
 export function* watchLocationChange() {
