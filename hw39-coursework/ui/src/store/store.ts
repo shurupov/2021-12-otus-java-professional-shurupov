@@ -7,7 +7,7 @@ import {watchApartmentList} from "components/ApartmentList/saga";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {watchLocationChange} from "components/routing/saga";
 import {routerMiddleware} from "connected-react-router";
-import {watchSignIn} from "components/Cabinet/SignInForm/saga";
+import {signInLocalstorage, watchSignIn, watchSignInLocalstorage} from "components/Cabinet/SignInForm/saga";
 import {watchSignUp} from "components/SignUpForm/saga";
 
 export const history = createBrowserHistory();
@@ -37,3 +37,6 @@ sagaMiddleware.run(watchApartmentList);
 sagaMiddleware.run(watchLocationChange);
 sagaMiddleware.run(watchSignIn);
 sagaMiddleware.run(watchSignUp);
+sagaMiddleware.run(watchSignInLocalstorage);
+
+store.dispatch(signInLocalstorage());

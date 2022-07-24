@@ -1,6 +1,8 @@
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
 import {UserMenu} from "components/Cabinet/UserMenu";
+import {cabinetSlice} from "components/Cabinet/slice";
+import {push} from "connected-react-router";
 
 const mapStateToProps = (storeState: any) => {
 
@@ -11,10 +13,14 @@ const mapStateToProps = (storeState: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        submit: (some: any) => {
-            // dispatch(signInAction(authRequest));
-        }
+        signIn: () => {
+            dispatch(push("/signin"));
+        },
+        logout: () => {
+            dispatch(cabinetSlice.actions.logout());
+            dispatch(push("/"));
+        },
     }
 };
 
-export const ConnectedUserMenu = connect(mapStateToProps)(UserMenu);
+export const ConnectedUserMenu = connect(mapStateToProps, mapDispatchToProps)(UserMenu);

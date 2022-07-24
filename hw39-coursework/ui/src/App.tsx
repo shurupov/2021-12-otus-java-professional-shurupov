@@ -9,7 +9,7 @@ import {ConnectedRouter} from "connected-react-router";
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import {ConnectedSignIn} from "components/Cabinet/SignInForm/ConnectedSignIn";
 import {ConnectedSignUp} from "components/SignUpForm/ConnectedSignUp";
-import { ConnectedUserMenu } from 'components/Cabinet/ConnectedUserMenu';
+import { ConnectedUserMenu } from "components/Cabinet/ConnectedUserMenu";
 
 export const App = () => {
 
@@ -19,14 +19,13 @@ export const App = () => {
                 <Layout className="layout">
                     <Layout.Header>
                         <div className="logo" />
+                        <ConnectedUserMenu />
                         <Menu
                             theme="dark"
                             mode="horizontal"
-                            style={{ float: "left" }}
                         >
                             <Link component={Menu.Item} to="/apartments" style={{ float: "right", width: 140 }}>Список квартир</Link>
                         </Menu>
-                        <ConnectedUserMenu />
                     </Layout.Header>
                     <Layout.Content className="content-container">
                         <Breadcrumb style={{ margin: '16px 0' }}>

@@ -14,7 +14,8 @@ export const cabinetSlice = createSlice({
                 authenticated: true,
             }
         },
-        logout: (state, action) => {
+        logout: (state) => {
+            localStorage.removeItem("jwttoken");
             return {
                 authenticated: false
             }

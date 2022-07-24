@@ -49,8 +49,3 @@ export function* authenticatedFetch(url: string, method = "GET", body: any = und
         }
     }
 }
-
-export const logout = (): void => {
-    localStorage.removeItem("jwttoken");
-    store.dispatch(push("/signin"));
-}

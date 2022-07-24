@@ -20,9 +20,7 @@ export function* workerLocationChange(): any {
     }
     if (url == "/") {
         const authenticated: boolean = yield select(authenticatedSelector);
-        console.log("workerLocationChange authenticated " + authenticated);
         const jwttoken: string = yield select(jwtTokenSelector);
-        console.log("workerLocationChange jwttoken " + jwttoken);
         if (authenticated) {
             yield put(push("/apartments"));
         } else {

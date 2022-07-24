@@ -1,14 +1,13 @@
 import {Avatar, Menu} from "antd";
-import {logout} from "utils/auth";
 import React from "react";
-import {Apartment} from "components/ApartmentList/ApartmentList";
 import {Link} from "react-router-dom";
 
-export interface UserMenuProps extends SignInResponse {
+export interface UserMenuProps {
     authenticated: boolean;
+    logout: Function;
 }
 
-export interface UserApartment extends Apartment {
+/*export interface UserApartment extends Apartment {
     share: number;
     decisionMaker: boolean;
     ownerShipType: string;
@@ -28,7 +27,7 @@ export interface SignInResponse {
     username: string;
     roles: Array<string>;
     userBuildings: Array<UserBuilding>;
-}
+}*/
 
 export const UserMenu = (props: any) => {
     if (!props.authenticated) {
@@ -36,9 +35,11 @@ export const UserMenu = (props: any) => {
             <Menu
                 theme="dark"
                 mode="horizontal"
-                style={{ float: "right" }}
+                style={{ float: "right", width: 100 }}
             >
-                <Link component={Menu.Item} to="/signin">Войти</Link>
+                <Menu.Item onClick={props.signIn}>
+                    Войти
+                </Menu.Item>
             </Menu>
         );
     }
@@ -47,9 +48,11 @@ export const UserMenu = (props: any) => {
         <Menu
             theme="dark"
             mode="horizontal"
-            style={{ float: "right" }}
+            style={{ float: "right", width: 128 }}
         >
-            <Menu.Item onClick={() => logout()}><Avatar src="https://joeschmoe.io/api/v1/random" /> Выход</Menu.Item>
+            <Menu.Item onClick={props.logout}>
+                <Avatar src="https://joeschmoe.io/api/v1/random" /> Выход
+            </Menu.Item>
         </Menu>
     );
 }
