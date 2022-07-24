@@ -18,6 +18,7 @@ import ru.shurupov.homeowners.core.domain.dto.MessageResponse;
 import ru.shurupov.homeowners.core.domain.dto.SignupRequest;
 import ru.shurupov.homeowners.core.domain.security.UserDetailsImpl;
 import ru.shurupov.homeowners.core.repository.UserRepository;
+import ru.shurupov.homeowners.core.service.AuthenticationService;
 import ru.shurupov.homeowners.core.service.JwtService;
 
 import java.util.List;
@@ -35,29 +36,16 @@ public class AuthController {
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
 
+    private final AuthenticationService authenticationService;
+
     @PostMapping("/signin")
     public JwtResponse authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtService.generateJwtToken(authentication);
+        return authenticationService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
+    }
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities()
-            .stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList());
-        return JwtResponse.builder()
-            .token(jwt)
-            .id(userDetails.getId())
-            .username(userDetails.getUsername())
-            .fullName(userDetails.getFullName())
-            .shortName(userDetails.getShortName())
-            .phoneNumber(userDetails.getPhoneNumber())
-            .telegram(userDetails.getTelegram())
-            .roles(roles)
-            .userBuildings(userDetails.getUserBuildings())
-            .build();
+    @PostMapping("/refresh")
+    public JwtResponse refresh() {
+        return authenticationService.refreshToken();
     }
 
     @PostMapping("/signup")

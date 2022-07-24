@@ -1,7 +1,9 @@
-import {call, put} from "redux-saga/effects";
-import {SignInRequest} from "components/SignInForm/SignIn";
+import {call, put, select} from "redux-saga/effects";
 import { push } from "connected-react-router";
 import {store} from "store/store";
+
+export const authenticatedSelector = (state: any) => state.cabinet.authenticated;
+export const jwtTokenSelector = (state: any) => state.cabinet.token;
 
 export function* extendedFetch(url: string, method = "GET", body: any = undefined, headers = {}): any {
     const requestSettings: RequestInit = {
@@ -23,17 +25,17 @@ export function* extendedFetch(url: string, method = "GET", body: any = undefine
     return yield call([response, 'json']);
 }
 
-export function* loginFetch(authRequest: SignInRequest): any {
-    return yield call(extendedFetch, "/core/api/auth/signin", "POST", authRequest);
-}
-
 export function* authenticatedFetch(url: string, method = "GET", body: any = undefined): any {
-    if (!authenticated()) {
+    const authenticated: boolean = yield select(authenticatedSelector);
+    console.log("authenticated " + authenticated);
+    if (!authenticated) {
         console.log("not authenticated");
         yield put(push("/signin"));
-        return;
+        throw Error();
     }
-    const jwttoken = localStorage.getItem("jwttoken");
+    const jwttoken: string = yield select(jwtTokenSelector);
+    console.log("jwttoken " + jwttoken);
+
     const authHeaders = {
         "Authorization": "Bearer " + jwttoken
     };
@@ -42,20 +44,13 @@ export function* authenticatedFetch(url: string, method = "GET", body: any = und
         return yield call(extendedFetch, url, method, body, authHeaders);
     } catch (e: any) {
         if (e.response != undefined && e.response.status == 401) {
-            console.log("not authenticated");
+            console.log(e, "not authenticated");
             yield put(push("/signin"));
         }
     }
 }
 
-export const authenticated = (): boolean => {
-    return localStorage.getItem("jwttoken") != null;
-}
-
 export const logout = (): void => {
     localStorage.removeItem("jwttoken");
     store.dispatch(push("/signin"));
-    /*setTimeout(() => {
-
-    }, 500);*/
 }

@@ -4,7 +4,7 @@ RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 
 ADD ./ $PROJECT_DIR/
-RUN npm install
+#RUN npm install
 RUN npm run build
 
 FROM nginx:1.17.1-alpine
