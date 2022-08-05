@@ -38,3 +38,12 @@ out
 *.idea
 
 logs/
+
+target
+*kubeconfig.yaml
+.dockerconfigjson
+01-secret.yml
+
+node_modules/
+
+dockerpassword
